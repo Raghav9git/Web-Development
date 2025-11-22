@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arunachal Adventure</title>
+    <link rel="stylesheet" href="arunachal css.css">
+    <link rel="icon" type="image/png" href="favicon.png?v=2">
+    
+</head>
+<body>
+
+
+    <link ref="icon" type="image/png" href="favicon.png"
+
+
+
+<!-- TOP FIXED NAV -->
+<nav class="topnav">
+  <div class="topnav-left">
+    <div class="logo">Arunachal Adventures</div>
+  </div>
+
+  <ul class="topnav-menu" id="topMenu">
+    <li><a href="#" class="nav-link">Home</a></li>
+    <li><a href="#" class="nav-link">About</a></li>
+    <li><a href="#" class="nav-link">Gallery</a></li>
+    <li><a href="#" class="nav-link">Contact</a></li>
+  </ul>
+
+  <div class="topnav-ctas">
+    <button class="btn ghost" id="openSidebarBtn" aria-label="Open menu">☰</button>
+    <a href="#" class="btn outline">Login</a>
+    <a href="#" class="btn primary">Sign Up</a>
+  </div>
+</nav>
+
+<!-- SLIDING SIDEBAR -->
+<aside id="sideNav" class="side-nav" aria-hidden="true">
+  <button class="close-btn" id="closeSidebarBtn" aria-label="Close menu">✕</button>
+  <nav class="side-nav-inner" role="navigation" aria-label="Main">
+    <a href="#" class="side-link"> Your Profile</a>
+    <a href="#" class="side-link"> Edit Profile</a>
+    <a href="#" class="side-link"> Map View</a>
+    <a href="#" class="side-link"> Our Itinerary</a>
+    <a href="#" class="side-link"> Travel Tips</a>
+    <a href="#" class="side-link"> Change Language</a>
+    <a href="#" class="side-link"> Log Out</a>
+  </nav>
+</aside>
+
+<!-- Overlay when sidebar open -->
+<div id="overlay" class="overlay" tabindex="-1"></div>
+
+<!-- tiny script for toggling -->
+<script>
+  const openBtn = document.getElementById('openSidebarBtn');
+  const closeBtn = document.getElementById('closeSidebarBtn');
+  const sideNav = document.getElementById('sideNav');
+  const overlay = document.getElementById('overlay');
+
+  function openNav(){
+    sideNav.classList.add('open');
+    overlay.classList.add('visible');
+    sideNav.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden'; // prevent background scroll
+  }
+  function closeNav(){
+    sideNav.classList.remove('open');
+    overlay.classList.remove('visible');
+    sideNav.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openNav);
+  closeBtn.addEventListener('click', closeNav);
+  overlay.addEventListener('click', closeNav);
+
+  // close on Escape
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && sideNav.classList.contains('open')) closeNav();
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    <div class="side-nav" id="sideNav">
+    <a href="#day1">Day 1</a>
+    <a href="#day2">Day 2</a>
+    <a href="#day3">Day 3</a>
+    <a href="#day4">Day 4</a>
+    <a href="#day5">Day 5</a>
+    <a href="#day6">Day 6</a>
+    <a href="#day7">Day 7</a>
+    <a href="#day8">Day 8</a>
+    <a href="#day9">Day 9</a>
+    <a href="#day10">Day 10</a>
+    </div>
+
+    <div class="open-btn" onclick="openNav()">☰</div>
+
+
+    <script>
+    function openNav() 
+    {
+    const nav = document.getElementById("sideNav");
+    if(nav.style.width === "250px")
+    {
+    nav.style.width = "0px";
+    } 
+    else 
+    {
+    nav.style.width = "250px";
+    }
+    }
+    </script>
+
+-->
+
+    <br>
+        <br>
+        <br>
+        
+
+     
+    
+
+    
+        <h1>Welcome</h1>
+        <h2>To</h2>
+        <h3>Arunachal Adventure</h3>
+
+        <h4 >Here, you will explore the the Nature, Adventure & Memories of our Arunachal Trip!!!
+
+            So, Lets Buckle UP!!! for the journey of 10 days into Arunachal
+        </h4>
+        <h5>Choose from below which day you would like to visit</h5>
+
+
+
+        
+        <button id="b1" onclick="location.href='#day1'">Day 1 - Travel to NorthEast!</button>
+        <button id="b2" onclick="location.href='#day2'">Day 2 - Welcome to Homestay! </button>
+        <button id="b3" onclick="location.href='#day3'">Day 3 - Dense Forest Trek!</button>
+        <button id="b4" onclick="location.href='#day4'">Day 4 - Enter The Anini!</button>
+        <button id="b5" onclick="location.href='#day5'">Day 5 - Anini Grasslands!</button>
+        <button id="b6" onclick="location.href='#day6'">Day 6 - Riverside Camping!</button>
+        <button id="b7" onclick="location.href='#day7'">Day 7 - Wonders Of Waterfalls!</button>
+        <button id="b8" onclick="location.href='#day8'">Day 8 - Dibang Valley Jungle Camp!</button>
+        <button id="b9" onclick="location.href='#day9'">Day 9 - Heading Back To Guwahati!</button>
+        <button id="b10" onclick="location.href='#day10'">Day 10 - Landing In Mumbai!</button>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>  
+        <p>To View the Entire Photos Archive</p>
+        <br>
+        <button id="b11">LOGIN</button>
+        <br>
+        <p id="p1">If New to Our Page</p>
+        <br>
+        <button id="b12">Sign Up</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+        <h6 id="day1">Day 1 ✈️</h6>
+        <img id="img1" src="images/day1/image1.jpeg">
+        <p id="p2"><br><br>Our Arunachal trip kicked off early on 18th October 2025. We left home at 3 AM to catch our flight from Mumbai and somehow managed to stay awake through the journey. The route was Mumbai–Hyderabad (5:45–7:30 AM) and then Hyderabad–Guwahati (9:45–12:30 PM). By the time we landed around 1 PM, the excitement of finally being in the Northeast kicked in.</p>
+        <br>
+        <img id="img6" src="images/day1/image6.jpeg">
+        <p id="p3"><br>From the airport, we booked a taxi to explore Guwahati before our evening train. Our first stop was the Kamakhya Temple, a beautiful and peaceful spot with an amazing view of the city. It felt like the perfect place to start our trip with some blessings.</p>
+        <br>
+        <img id="img7" src="images/day1/image7.jpeg">
+        <p id="p4"><br><br><br>Next, we headed to Fancy Bazaar, Guwahati’s buzzing local market. The streets were full of life — small shops, colorful clothes, local snacks, and friendly faces everywhere. We wandered through the narrow lanes, checking out local handicrafts and Assamese traditional wear. The hustle and bustle instantly reminded us of markets back home in Mumbai — lively, crowded, and full of energy. We spent some time walking around, shopping a little, chatting with a few shopkeepers, and just soaking in the vibe of the place.</p>
+        <br>
+        <img id="img9" src="images/day1/image9.jpeg">
+        <p id="p5"><br><br><br><br><br><br>By 6 PM, we reached Guwahati Railway Station after a long travel day. After grabbing a few essentials for the journey, we boarded the 7:30 PM Rajdhani Express to Dibrugarh. Once we settled into our seats, the tiredness from the early start and multiple flights finally caught up with us. It felt good to just relax, watch the city lights fade, and look forward to the adventures waiting for us in Arunachal.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b13">Tap To View Day 1 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+       
+        <h7 id="day2">Day 2 🏡</h7>
+        <img id="imgG" src="images/day2/golden pagoda.jpeg">
+        <p id="p6"><br><br><br><br><br>We reached Dibrugarh early in the morning at 6:45 a.m. and met our Nomadura guide, Mr. Mukul. After a short chat, we stopped at a local dhaba for breakfast — simple but satisfying roti, dal, egg omelet, and tea. Soon after, we headed to the Golden Pagoda, a calm and beautifully designed monastery that stood out with its bright golden structure and peaceful surroundings.</p>
+        <br>
+        <img id="imgPK" src="images/day2/parshuram kund.jpeg">
+        <p id="p7"><br><br><br><br><br>Parshuram Kund had a calm, open feel surrounded by low hills and the steady flow of the Lohit River. Right in the middle of the stream stood a giant, majestic rock — smooth and weathered, almost like it had been guarding the place for ages. The air was cool and clear, and the whole area had a quiet, steady rhythm to it.</p>
+        <br>
+        <img id="imgPS" src="images/day2/parshuram statue.jpeg">
+        <p id="p8"><br><br><br><br><br><br><br>We walked around for a while, noticing the huge statue of Parshuram standing tall near the riverbank. Our guide shared a few stories about the legend behind the place, adding some context to what we were seeing. It was a peaceful stop overall, quiet and simple, with just enough time to take in the scene before moving on.</p>
+        <br>
+        <img id="imgH" src="images/day2/homestay.jpeg">
+        <p id="p9"><br><br><br><br><br><br><br>By about 3 p.m., we arrived at Ninashi Homestay. The place had a relaxed vibe, with friendly hosts who instantly made us feel at home. We spent some time chatting with Anushi and her parents, who own the homestay and told us that it had even received the Best Homestay Award in Wakro — something that felt well-deserved after seeing their warmth and hospitality.</p>
+        <br>
+        <img id="imgF" src="images/day2/fishing.jpeg">
+        <p id="p10"><br><br><br><br><br><br><br>Dinner was served at 8 p.m., a traditional local meal that wrapped up the day nicely. Before that, we went to Anushi’s farm for a bit of fishing, though we didn’t manage to catch any fish — still a fun way to spend the evening. The people here were genuinely welcoming, and it already felt like we were seeing the real side of Arunachal.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b14">Tap To View Day 2 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <headingday3 id="day3">Day 3 🏞️</headingday3>
+        <img id="imgM" src="images/day3/mithun gate.jpeg">
+        <p id="p11"><br><br><br><br><br>We woke up early at around 6 am to a fresh and cool morning. After getting ready, we ate puri and dal for breakfast. Then we headed towards Mithun View Gate, which is inside the Kamlang Tiger Reserve, and this was the starting point of our trek for the day.</p>    
+        <br>
+        <img id="imgF2" src="images/day3/forest2.jpeg">
+        <p id="p12"><br><br><br><br><br><br><br>On the way we met Peter, who is a wildlife photographer and also a guide. From Mithun View Gate, we began our trek at around 9 am. The path went deep into the forest with a lot of uphill walking. It was quite tough but also very scenic, and the whole route felt peaceful and beautiful. The total trek distance was almost 10 km.</p>
+        <br>
+        <img id="imgB" src="images/day3/bridge.jpeg">
+        <p id="p13"><br><br><br><br><br><br><br><br><br><br>After some of trekking, we reached the Kamlang River. To cross it, we walked over a long and high hanging bridge. It moved slightly as we walked, but the view from the top was amazing, and it made the crossing feel exciting.</p>
+        <br>
+        <img id="imgO" src="images/day3/bamboo.jpeg">
+        <p id="p14"><br><br><br><br><br><br><br><br><br><br><br>Soon after the river, we entered the dense part of the forest. Tall bamboo trees—both thick and thin varieties—grew closely together, along with large banana plants and many types of forest insects. The sunlight barely reached the ground, so it felt much darker than the actual time of day.</p>
+        <br>
+        <img id="imgHouse" src="images/day3/house.jpeg">
+        <p id="p15"><br><br><br><br><br>When we reached the top of the trek, we came across a small, cute wooden hut that looked warm and welcoming in the middle of the forest. We stopped there to rest and eat our packed lunch. Peter helped us pluck a local yellow fruit called rabab from a nearby tree. The fruit was slightly bitter, but trying it right there made the moment special.</p>
+        <br>
+        <img id="imgriver" src="images/day3/river.jpeg">
+        <p id="p16"><br><br><br><br><br><br><br>Around 4 pm, we stopped by the bank of the Kamlang River and took a short break, sitting on the large rocks and enjoying the quiet surroundings. After resting for about half an hour, we continued the final stretch of our walk. By around 5:30 pm, we reached Ninashi Resort, where we settled in for the night, tired but satisfied after a long and fulfilling day.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b15">Tap To View Day 3 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+       
+
+        <headingday4 id="day4">Day 4 🛣️</headingday4>
+        <img id="imgleavingH" src="images/day4/leaving homestay.jpeg">
+        <p id="p17"><br><br><br><br><br><br><br><br><br>We checked out of Ninashi Resort early in the morning and said goodbye to Anushee, the kind and warm host who had taken great care of us during our stay. After a quick photo together at the homestay, we left for Anini at around 5 am to begin the long journey ahead with our driver bicky.</p>    
+        <br>
+        <img id="imgR" src="images/day4/Myodia pass.jpeg">
+        <p id="p18"><br><br><br><br><br><br><br><br><br><br><br>We had our breakfast in Roing and continued our journey towards Mayodia Pass. Soon after leaving the town, the road opened into wide green plains with calm, open scenery on both sides. This is where we stopped to take the photo and the peaceful landscape made it one of the most pleasant moments of the drive.</p>
+        <br>
+        <img id="imgMy" src="images/day4/snow mountains.jpeg">
+        <p id="p19"><br><br><br><br><br><br>Further along the drive, we reached Mayodia Pass, where the landscape opened into a stunning stretch of layered mountain ranges. From a few viewpoints, we could even see distant snow-covered peaks shining in the light. This was also where we first felt the true cold of Arunachal—crisp, sharp, and completely different from the weather earlier in the trip. The temperature stayed this way all the way to Anini, and even now, thinking about it still gives me chills.</p>
+        <br>
+        <img id="imgTothro" src="images/day4/tothro resort.jpeg">
+        <p id="p20"><br><br><br><br><br>We reached Anini around 4 pm and checked into Tothro Resort, where we were first welcomed with a warm cup of tea. After settling into our room and relaxing for a while, we met our new tour guide, Mr. Timai. He was very kind and had excellent local knowledge, and he explained our plan for the next three days in Anini. Later in the evening, we enjoyed a wonderful Japanese dinner at the resort, which was a pleasant surprise after the long journey. We ended the day by going to sleep around 9 pm, feeling relaxed and ready for the days ahead.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b16">Tap To View Day 4 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+        <headingday5 id="day5">Day 5 ⛰️</headingday5>
+        <img id="imgatimi" src="images/day5/atimi visit.jpeg">
+        <p id="p21"><br><br><br><br><br><br>We began the day early, waking up at 5 am and having breakfast at the resort before heading to Timai’s house. He welcomed us warmly, and his home had a beautiful natural charm—built entirely from bamboo, with a small fire pit, wooden elements, and large green pumpkins placed around the courtyard. There we also met his sister, Atimi, who was very kind and made us feel comfortable from the moment we arrived.</p>    
+        <br>
+        <img id="imgTembos" src="images/day5/viewpoint.jpeg">
+        <p id="p22"><br><br><br><br><br>Athimi guided us on the hike with her funny and charming nature, which made the walk more enjoyable. The trail to Tembo’s View Point took about 50 minutes with steady climbs. The viewpoint opened into a wide plain with calm natural surroundings and mountain ranges in the distance, creating a peaceful atmosphere.</p>
+        <br>
+        <img id="imgtent" src="images/day5/tent.jpeg">
+        <p id="p23"><br><br><br><br><br><br>After reaching the viewpoint, we rested for a while under a small tent that gave us some shade from the mildly harsh sunlight. It was a comfortable place to relax after the climb, and as we sat there, we could hear gibbons calling from the forest nearby. The quiet spot and the sounds of the jungle made the break feel peaceful.</p>
+        <br>
+        <img id="imglunch" src="images/day5/lunch.jpeg">
+        <p id="p24"><br><br><br><br><br><br><br><br><br>After returning from the hike, we were invited for a traditional lunch at their auntie’s house. The meal was delicious and homely—bok choy and brinjal sabji, rice, rajma dal, and a spicy red chilli chutney that added a perfect kick to the plate. It felt like the kind of food you remember long after the trip.</p>
+        <br>
+        <img id="imgemuli" src="images/day5/emuli.jpeg">
+        <p id="p25"><br><br><br><br><br><br><br>At around 2:30 pm, we left for Emuli Grassland. The trail had a steady ascend and was surrounded by wide open grass fields and strong winds that kept crashing against us, making the hike feel lively and energising. This route is actually the starting section of the famous 7 Lakes Trek, a seven-day journey known as one of the toughest treks in Arunachal. The descent was the most enjoyable part—the smooth, grassy slope had us sliding down sections of it and laughing like kids, adding a fun and memorable touch to the walk.</p>
+        <br>
+        <img id="imgguest" src="images/day5/end.jpeg">
+        <p id="p26"><br><br><br><br><br><br><br><br>We reached back down around 4:30 pm and spent the evening at Timai’s house, chatting and enjoying a tasty dinner. Most of our conversation was with Chacha Mao, who shared many interesting local stories that made the evening even better. We also met their guests, Mr. Nicolas and his wife, Gwen, from Myanmar, and had a pleasant time talking with them. Before ending the day, we did some stargazing under the clear night sky, and finally returned to Tothro Resort around 9:30 pm, ending the day on a calm and happy note.</p>    
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b16">Tap To View Day 5 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+
+        <headingday6 id="day6">Day 6 🏕️</headingday6>
+        <img id="imgcamp" src="images/day6/riverside campsite.jpeg">
+        <p id="p27"><br><br><br><br><br><br>We started the morning calmly and left for Dree Afra riverside campsite in Acheso, Dibang Valley at around 9:30 am. The drive itself was pleasant, and we reached the camp by about 10:45 am.</p>    
+        <br>
+        <img id="imgRiver" src="images/day6/river.jpeg">
+        <p id="p28"><br><br><br><br><br><br><br>The campsite turned out to be one of the most beautiful places of our entire trip, set beside a crystal-clear river that looked untouched and absolutely stunning. The air was sharply cold, much colder than we had expected, and we quickly realised we hadn’t brought the right winter clothes. Still, the chill only added to the atmosphere, and we truly enjoyed it. Knowing that this peaceful valley lay only about 200–300 kilometres from the China border made the location feel even more unique and unforgettable.</p>
+        <br>
+        <img id="imgrafting1" src="images/day6/rafting1.jpeg">
+        <p id="p29"><br><br>Then we went for rafting in the Dree River. Timai gave us a quick and clear briefing on rafting. The ride was full of excitement, the freezing splashes made every moment even sharper. We also tried swimming in the icy water, and though it shocked us at first, it turned into an unforgettable part of the day!</p>
+        <br>
+        <img id="imgrafting2" src="images/day6/rafting2.jpeg">
+        <p id="p30"><br><br><br><br><br><br><br><br><br>When we reached the end of the river, we sat quietly in the raft for a few minutes, taking in the magnificent nature around us. The silence, the cold air, and the stunning valley made the moment feel very special. After that, we returned to the camp for lunch and took a short break to rest.</p>
+        <br>
+        <img id="imgcycling1" src="images/day6/cycling1.jpeg">
+        <p id="p31"><br><br><br><br><br><br><br><br><br><br><br><br>At around 2:30 pm, we began our cycling trip. Starting from the campsite, we rode nearly 22 km ahead and then cycled back. Along the way, we crossed the gate of the Dibang Wildlife Sanctuary, which made the route feel even more special. Riding through Dibang Valley—surrounded by tall pine trees, huge mountains, waterfalls, and the river flowing beside us—felt so heavenly!</p>
+        <br>
+        <img id="imgcycling2" src="images/day6/cycling2.jpeg">
+        <p id="p32"><br><br><br><br><br><br><br><br><br><br><br>Cycling through those long stretches of absolute silence, with only the cold breeze and the vast, untouched nature around us, created a moment that felt deeply grounding. It almost made me pause and think about life and the universe in a simple, quiet way. We reached back at Dree Afra Camp around 4:30 pm, feeling tired but extremely happy with the day’s adventures. The peaceful surroundings of the valley made the return even nicer.</p>    
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b17">Tap To View Day 6 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+
+        <headingday7 id="day7">Day 7 💧</headingday7>
+        <img id="imgkaro" src="images/day7/karo.jpeg">
+        <p id="p33"><br><br><br><br>We woke up at around 5:45 am and began the day with a peaceful walk along the riverside. After the walk, we had breakfast at 8:30 am—puri bhaji and roti bhaji. At around 9:00 am, we started our waterfall drive, with Karo Waterfall as our first stop. It was beautifully scenic and, making it a wonderful beginning to the day’s outing.</p>    
+        <br>
+        <img id="imgmawu" src="images/day7/mawu.jpeg">
+        <p id="p34"><br><br><br><br><br><br><br>From Karo, we continued towards Mawu Waterfall. This one was truly huge—so large that it felt like a scene straight out of Baahubali. Timai mentioned that this wasn’t even its full size, and that in the summer season it becomes even more powerful and enormous, which was hard to imagine given how grand it already looked.</p>
+        <br>
+        <img id="imgahi" src="images/day7/ahi.jpeg">
+        <p id="p35"><br><br><br><br><br><br><br><br><br><br><br>After taking in the views at Mawu, we headed towards Ahi Waterfall, where the weather was chilly and refreshing. We stopped there for a warm cup of tea, enjoying the sound of the waterfall and the cold air around us. It was a simple but perfect moment.</p>
+        <br>
+        <img id="imgchigu" src="images/day7/chigu.jpeg">
+        <p id="p36"><br><br><br><br><br><br><br><br><br>On our way back, we visited the Chigu Campsite. The place was calm and scenic, surrounded by untouched nature, and from there we could even see the snowy peaks of the 7 Lakes mountains in the distance. It added a beautiful and quiet pause to the day before heading back. We reached Dree Afra around 1:30 pm and had our lunch there.</p>
+        <br>
+        <img id="imgvillage" src="images/day7/village.jpeg">
+        <p id="p37"><br><br><br><br><br><br><br><br><br><br><br>Later in the afternoon, we went for a walk to Acheso village, the last village of Arunachal Pradesh. With only two or three houses, the village had a peaceful and isolated charm. We also visited the sacred rock of Acheso, where Timai told us a few local legends connected to it, adding a cultural touch to the walk. He then plucked red 'ebisi' fruits directly from a tree and shared them with us, which made the experience even more enjoyable. We returned to the camp for tea around 4:30 pm, ending the day in a relaxed and calm mood.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b18">Tap To View Day 7 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+
+
+        <headingday8 id="day8">Day 8 🏘️</headingday8>
+        <img id="imgwinding" src="images/day8/winding.jpeg">
+        <p id="p38"><br><br><br><br><br><br><br><br>We started our journey from Anini to Roing early in the morning at 5 am. As we left Anini, the winding mountain roads and long bends could be seen of the valley and the landscape which were an amazing view. Then we drive through Mayodia Pass.</p>    
+        <br>
+        <img id="imgscenery" src="images/day8/scenery.jpeg">
+        <p id="p39"><br><br><br><br><br><br><br><br><br><br><br><br><br>Near Roing, the scenery changed into open plain land with the Dibang River flowing alongside. It was a huge wide riverbed and open surrounding. On the way, we stopped for lunch at “Old Hotel” one of the oldest hotels near Mayodia Pass.</p>
+        <br>
+        <img id="imgresort" src="images/day8/resort.jpeg">
+        <p id="p40"><br><br><br><br><br><br><br><br>We reached Roing around 2:15 pm and checked into Dibang Valley Resort. After taking a short break, we visited the Roing market at around 3:30 pm. We spent some time walking around the shops and returned to the resort by 5 pm.</p>
+        <br>
+        <img id="imgcheckout" src="images/day8/checkout.jpeg">
+        <p id="p41"><br><br><br><br><br><br><br><br><br>For dinner, we had burji roti and soup, which felt warm and filling after a day of travel. Then we had some chitchat with the friendly owner of the resort. We kept the evening simple and ended the day on a comfortable note.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b19">Tap To View Day 8 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+
+
+
+        <headingday9 id="day9">Day 9 🚗</headingday9>
+        <img id="imgtemple" src="images/day9/jagannath temple.jpeg">
+        <p id="p42"><br><br><br><br><br><br><br><br>We started our return journey from Dibang Valley Resort towards Dibrugarh at around 9 am. On the way, we stopped at a tea shop and did quite a bit of tea shopping. After that, we visited the Jagannathpuri Temple, which was a calm and pleasant stop before continuing our journey. We then had lunch at the Kanchanjunga open restaurant.</p>    
+        <br>
+        <img id="imgrr" src="images/day9/brahmaputra river.jpeg">
+        <p id="p43"><br><br><br><br><br><br><br><br><br>After lunch, we visited the Bogibeel Bridge. The views from the bridge were wide and open, with the dry Brahmaputra River stretching across a large area. Seeing the riverbed so vast and quiet added a different perspective to the drive.</p>
+        <br>
+        <img id="imgbye" src="images/day9/bye.jpeg">
+        <p id="p44"><br><br><br><br><br>Towards the evening, we went to the Dibrugarh local market and did some last-minute shopping. Around 7 pm, we reached the station and said goodbye to our driver, Bicky, who had been with us throughout the trip. We then boarded the Rajdhani train from Dibrugarh to Guwahati, marking the end of our journey.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b20">Tap To View Day 9 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+
+
+
+
+        <headingday10 id="day10">Day 10 🛫</headingday10>
+        <img id="imgplane1" src="images/day10/1.jpeg">
+        <p id="p45"><br><br><br><br><br><br><br><br>Day 10 was mainly a travel day as we flew from Guwahati to Kolkata and then onward to Mumbai. One of the flights was slightly delayed, but we took it calmly and moved through the journey at an easy pace, already feeling relaxed after completing such a memorable trip.</p>    
+        <br>
+        <img id="imgplane2" src="images/day10/2.jpeg">
+        <p id="p46"><br><br><br><br><br><br><br><br><br>During our layovers, we walked around the airports, explored a few stores, and did some small shopping to pass the time. Even though we were a little tired from the travel, the day still felt smooth and comfortable. As our flight finally landed in Mumbai, we felt a strong sense of satisfaction—ten days of exploring Arunachal Pradesh had given us beautiful forests, mountains, rivers, new friendships, peaceful moments, and experiences we will remember for a long time. Peaceful moments, amazing people, and memories felt rich and personal. It was the kind of trip that stays with you long after it ends, and reaching home felt like the perfect way to close such a meaningful journey.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="b21">Tap To View Day 10 Gallery!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    
+    
+
+        
+       
+
+
+       
+ 
+    
+
+
+
+
+
+    
+
+    
+
+    
+
+
+</body>
+</html>
