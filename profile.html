@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#0b2a4a">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile | SafeNet</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{background:#0f0f1a;color:#fff;overflow-x:hidden}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;top:0;width:100%;
+  background:#0b0b14;
+  padding:12px 20px;
+  z-index:1000;
+}
+.navbar ul{
+  list-style:none;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px;
+}
+.navbar a{
+  color:#ccc;text-decoration:none;
+  font-size:14px;
+  position:relative;
+  padding-bottom:4px;
+}
+.navbar a::after{
+  content:"";position:absolute;left:0;bottom:0;
+  width:0;height:2px;background:#6c63ff;
+  transition:.3s;
+}
+.navbar a:hover::after,.navbar a.active::after{width:100%}
+
+/* SITE TITLE */
+.site-title{
+  margin-top:90px;
+  text-align:center;
+  font-size:32px;
+  font-weight:600;
+}
+
+/* LAYOUT */
+.container{
+  margin-top:40px;
+  padding:40px;
+  display:grid;
+  grid-template-columns:1fr 1.2fr 1fr;
+  gap:30px;
+}
+
+/* CARDS */
+.card{
+  background:#151528;
+  border-radius:16px;
+  padding:25px;
+  animation:slideUpFade .9s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes slideUpFade{
+  from{opacity:0;transform:translateY(60px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== CARD HOVER ANIMATION ===== */
+.card {
+  transition:
+    transform 0.35s cubic-bezier(.22,.61,.36,1),
+    box-shadow 0.35s cubic-bezier(.22,.61,.36,1),
+    background 0.35s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 18px 45px rgba(108, 99, 255, 0.35);
+  background: linear-gradient(
+    135deg,
+    #1b1b34,
+    #151528
+  );
+}
+
+
+/* PROFILE */
+.avatar{
+  width:120px;height:120px;
+  border-radius:50%;
+  border:3px solid #6c63ff;
+  object-fit:cover;
+}
+.btn{
+  margin-top:10px;
+  background:#6c63ff;
+  padding:8px 16px;
+  border-radius:20px;
+  border:none;
+  color:#fff;
+  cursor:pointer;
+}
+.save-btn{display:none}
+input[type=file]{display:none}
+.profile-input{
+  width:100%;
+  background:#1e1e35;
+  border:none;
+  border-radius:10px;
+  padding:8px;
+  color:#fff;
+  margin:6px 0;
+}
+.profile-input:disabled{opacity:.6}
+
+/* INCIDENTS */
+.incident{
+  background:#1e1e35;
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
+  cursor:pointer;
+}
+.incident:hover{background:#26264a}
+.tag{padding:4px 10px;border-radius:20px;font-size:12px}
+.fire{background:#ff4d4d}
+.flood{background:#4da6ff}
+.earthquake{background:#ffa94d}
+
+/* MAP */
+#map{height:260px;border-radius:14px}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  z-index:9999;
+  justify-content:center;
+  align-items:center;
+}
+.modal-content{
+  background:#151528;
+  width:90%;
+  max-width:600px;
+  border-radius:16px;
+  padding:25px;
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:12px;right:16px;
+  cursor:pointer;font-size:22px;
+}
+.modal img{
+  width:100%;
+  border-radius:12px;
+  margin-top:12px;
+}
+
+/* CHATBOT */
+.chatbot-btn{
+  position:fixed;
+  bottom:25px;right:25px;
+  background:#6c63ff;
+  padding:14px 18px;
+  border-radius:30px;
+  cursor:pointer;
+  z-index:9998;
+}
+.chatbot-box{
+  display:none;
+  position:fixed;
+  bottom:90px;right:25px;
+  width:320px;
+  background:#151528;
+  border-radius:16px;
+  z-index:9999;
+}
+.chat-header{background:#6c63ff;padding:10px;text-align:center}
+.chat-body{height:220px;padding:10px;overflow-y:auto}
+.chat-input{display:flex}
+.chat-input input{flex:1;padding:10px;border:none}
+.chat-input button{background:#6c63ff;border:none;color:#fff;padding:10px}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+<ul>
+<li><a href="report.html">Report</a></li>
+<li><a href="home.html">Home</a></li>
+<li><a href="profile.html" class="active">Profile</a></li>
+<li><a href="settings.html">Settings</a></li>
+<li><a href="map.html">MAP</a></li>
+<li><a href="analytics.html">Analytics</a></li>
+<li><a href="your safety.html">Your Safety</a></li>
+<li><a href="general info.html">General Info</a></li>
+<li><a href="want to help?.html">Want To Help?</a></li>
+<li><a href="community response.html">Community Response</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="incidents.html">Incidents</a></li>
+</ul>
+</nav>
+
+<h1 class="site-title">SafeNet</h1>
+
+<section class="container">
+
+<div class="card">
+<img id="avatar" class="avatar" src="avatar-demo.png">
+<button class="btn" onclick="fileInput.click()">Upload Photo</button>
+<input id="fileInput" type="file" accept="image/*">
+
+<input id="nameInput" class="profile-input" value="Raghav Sathe" disabled>
+<input id="emailInput" class="profile-input" value="raghav.demo@safenet.org" disabled>
+
+<p>Role: Citizen</p>
+<p>Member Since: January 2026</p>
+
+<button class="btn" onclick="enableEdit()">Edit Profile</button>
+<button class="btn save-btn" onclick="saveProfile()">Save Changes</button>
+</div>
+
+<div class="card">
+<h2>Your Reported Incident History</h2>
+<div class="incident" onclick="openReport(0)"><span class="tag fire">Fire</span> Residential fire</div>
+<div class="incident" onclick="openReport(1)"><span class="tag flood">Flood</span> Road flooding</div>
+<div class="incident" onclick="openReport(2)"><span class="tag earthquake">Earthquake</span> Mild tremors</div>
+</div>
+
+<div class="card">
+<h2>Your Location</h2>
+<div id="map"></div>
+</div>
+
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="incidentModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+    <p><b>Date & Time:</b> <span id="modalDate"></span></p>
+    <p><b>Type:</b> <span id="modalType"></span></p>
+    <p><b>Location:</b> <span id="modalLocation"></span></p>
+    <img id="modalImage">
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<div class="chatbot-btn" onclick="toggleChat()">Ask Me Anything!!!</div>
+<div class="chatbot-box" id="chatbot">
+<div class="chat-header">SafeNet Assistant</div>
+<div class="chat-body" id="chatBody"><p><b>Bot:</b> Hi! How can I help?</p></div>
+<div class="chat-input">
+<input id="chatInput">
+<button onclick="sendChat()">Send</button>
+</div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+fileInput.onchange=e=>{
+  const r=new FileReader();
+  r.onload=()=>avatar.src=r.result;
+  r.readAsDataURL(e.target.files[0]);
+};
+
+function enableEdit(){
+  nameInput.disabled=false;
+  emailInput.disabled=false;
+  document.querySelector(".save-btn").style.display="inline-block";
+}
+function saveProfile(){
+  nameInput.disabled=true;
+  emailInput.disabled=true;
+  document.querySelector(".save-btn").style.display="none";
+}
+
+/* MAP */
+const map=L.map("map",{dragging:true}).setView([19.076,72.8777],12);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+L.marker([19.076,72.8777]).addTo(map);
+
+/* REPORT DATA */
+const reports=[
+{title:"Residential Fire",desc:"Fire due to gas leakage.",date:"02 Jan 2026, 9:30 PM",type:"Fire",location:"Andheri East, Mumbai",image:"fire.png"},
+{title:"Road Flooding",desc:"Heavy rain caused flooding.",date:"29 Dec 2025, 6:10 AM",type:"Flood",location:"WEH, Mumbai",image:"roadflood.png"},
+{title:"Mild Tremor",desc:"Light tremors felt.",date:"15 Dec 2025, 12:45 AM",type:"Earthquake",location:"Mumbai",image:"tremor.png"}
+];
+
+function openReport(i){
+  const r=reports[i];
+  modalTitle.textContent=r.title;
+  modalDesc.textContent=r.desc;
+  modalDate.textContent=r.date;
+  modalType.textContent=r.type;
+  modalLocation.textContent=r.location;
+  modalImage.src=r.image;
+  incidentModal.style.display="flex";
+  document.body.style.overflow="hidden";
+}
+function closeModal(){
+  incidentModal.style.display="none";
+  document.body.style.overflow="auto";
+}
+
+/* CHATBOT */
+function toggleChat(){
+  chatbot.style.display=chatbot.style.display==="block"?"none":"block";
+}
+function sendChat(){
+  const msg=chatInput.value.trim();
+  if(!msg)return;
+  chatBody.innerHTML+=`<p><b>You:</b> ${msg}</p>`;
+  chatBody.innerHTML+=`<p><b>Bot:</b> Demo response.</p>`;
+  chatInput.value="";
+  chatBody.scrollTop=chatBody.scrollHeight;
+}
+</script>
+
+</body>
+</html>

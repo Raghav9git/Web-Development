@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Map | SafeNet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+/* ===== UNCHANGED STYLES ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 20%, #1b2a5a 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, #3b1d6b 0%, transparent 45%),
+    linear-gradient(180deg, #060814, #0b1020 60%, #05060f);
+  color:#e5e7eb;
+  padding-top:90px;
+}
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:1000;
+  display:flex;justify-content:center;flex-wrap:wrap;gap:22px;
+  padding:14px 20px;background:rgba(8,12,30,.75);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+nav a{color:#dbeafe;text-decoration:none;position:relative;padding-bottom:6px}
+nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;
+  background:linear-gradient(90deg,#38bdf8,#a78bfa);transition:.35s}
+nav a:hover::after,nav a.active::after{width:100%}
+.header{text-align:center;margin-bottom:14px}
+.header h1{font-size:34px;font-weight:800;
+  background:linear-gradient(90deg,#7dd3fc,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.map-controls{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-bottom:18px}
+.control-group{background:rgba(2,6,23,.75);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:12px 16px}
+.control-group h3{font-size:14px;margin-bottom:8px;color:#c7d2fe;text-align:center}
+.control-group button{margin:4px;padding:8px 14px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#1e3a8a,#4c1d95);color:#fff;cursor:pointer}
+.page{display:flex;justify-content:center;padding:20px}
+.card{width:100%;max-width:1100px;background:rgba(15,23,42,.9);
+  border-radius:22px;padding:26px;border:1px solid rgba(255,255,255,.08)}
+#map{height:520px;border-radius:18px;border:1px solid rgba(255,255,255,.15)}
+.info{margin-top:12px;font-size:14px;color:#c7d2fe}
+.leaflet-popup-content{font-size:14px;line-height:1.5}
+
+/* ===== CARD SIDEWAYS FADE-IN ANIMATION ===== */
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Apply animation to main card */
+.card {
+  animation: slideFadeIn 0.9s cubic-bezier(.22,.61,.36,1) both;
+}
+
+/* ===== BUTTON HOVER ANIMATIONS (ALL BUTTONS) ===== */
+.control-group button,
+nav a {
+  transition:
+    transform 0.35s cubic-bezier(.22,.61,.36,1),
+    box-shadow 0.35s cubic-bezier(.22,.61,.36,1),
+    filter 0.35s cubic-bezier(.22,.61,.36,1);
+}
+
+/* Hover effect */
+.control-group button:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow:
+    0 8px 18px rgba(99,102,241,0.45),
+    0 0 25px rgba(124,58,237,0.35);
+  filter: brightness(1.08);
+}
+
+/* Click (active) effect */
+.control-group button:active {
+  transform: scale(0.96);
+  box-shadow:
+    0 4px 10px rgba(99,102,241,0.35);
+}
+
+/* ===== NAVBAR LINK HOVER SMOOTHNESS ===== */
+nav a {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+nav a:hover {
+  transform: translateY(-1px);
+}
+
+
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="report.html">Report</a>
+  <a href="home.html">Home</a>
+  <a href="profile.html">Profile</a>
+  <a href="settings.html">Settings</a>
+  <a href="map.html" class="active">Map</a>
+  <a href="analytics.html">Analytics</a>
+  <a href="your safety.html">Your Safety</a>
+  <a href="general info.html">General Info</a>
+  <a href="want to help?.html">Want To Help?</a>
+  <a href="community response.html">Community Response</a>
+  <a href="services.html">Services</a>
+  <a href="incidents.html">Incidents</a>
+</nav>
+
+<div class="header"><h1>SafeNet</h1></div>
+
+<div class="map-controls">
+  <div class="control-group">
+    <h3>Weather Maps</h3>
+    <button onclick="selectMap('Temperature')">Temperature</button>
+    <button onclick="selectMap('Rain')">Rain / Storm</button>
+  </div>
+  <div class="control-group">
+    <h3>Incident / Disaster Maps</h3>
+    <button onclick="selectMap('VehicleAccident')">Vehicle Accidents</button>
+    <button onclick="selectMap('IndustrialAccident')">Industrial Accidents</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="card">
+    <div id="map"></div>
+    <div class="info" id="infoText">Select a map type, then click on the map</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+let selectedMapType=null;
+let map,marker=null,circle=null,baseRadius=3000;
+
+const accidentCache={},industrialCache={};
+
+function selectMap(type){
+  selectedMapType=type;
+  document.getElementById("infoText").innerText=`${type.replace(/([A-Z])/g," $1")} selected. Click map.`;
+}
+
+function clearVisuals(){
+  if(marker) map.removeLayer(marker);
+  if(circle) map.removeLayer(circle);
+}
+
+function locationKey(ll){return ll.lat.toFixed(3)+","+ll.lng.toFixed(3);}
+
+function getVehicleAccidents(key){
+  if(accidentCache[key]) return accidentCache[key];
+
+  const types = [
+    "Car Collision",
+    "Truck Accident",
+    "Two-Wheeler Crash",
+    "Bus Accident",
+    "Pedestrian Hit"
+  ];
+
+  const list = [];
+  const count = (key.charCodeAt(0) % 3) + 2; // 2–4 accidents
+
+  for(let i=0;i<count;i++){
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    d.setHours(8 + i * 2);
+
+    list.push({
+      type: types[i % types.length],
+      time: d.toLocaleString()
+    });
+  }
+
+  accidentCache[key] = list;
+  return list;
+}
+
+
+function getIndustrialAccidents(key){
+  if(industrialCache[key]) return industrialCache[key];
+  const types=["Chemical Spill","Electrocution","Heavy Machinery Accident","Construction Site Accident"];
+  const list=[];
+  for(let i=0;i<4;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    list.push({type:types[i],time:d.toLocaleString()});
+  }
+  industrialCache[key]=list;return list;
+}
+
+
+function updateCircleRadius(){
+  if(circle){
+    const zoom=map.getZoom();
+    circle.setRadius(baseRadius * (14/zoom));
+  }
+}
+
+window.addEventListener("load",()=>{
+  map=L.map("map").setView([19.076,72.8777],10);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(map);
+
+  map.on("zoomend",updateCircleRadius);
+
+  map.on("click",e=>{
+    if(!selectedMapType){alert("Select map type first");return;}
+    clearVisuals();
+    marker=L.marker(e.latlng).addTo(map);
+
+    if(selectedMapType==="IndustrialAccident"){
+      const key=locationKey(e.latlng);
+      const list=getIndustrialAccidents(key);
+      baseRadius=4000;
+      circle=L.circle(e.latlng,{radius:baseRadius,color:"#f97316",fillColor:"#f97316",fillOpacity:.25}).addTo(map);
+      updateCircleRadius();
+
+      let html="<b>Industrial Accidents</b><br><br>";
+      list.forEach((a,i)=>{
+        html+=`${i+1}. ${a.type}<br><small>${a.time}</small><br><br>`;
+      });
+      marker.bindPopup(html,{maxWidth:320}).openPopup();
+      return;
+    }
+
+    if(selectedMapType==="VehicleAccident"){
+  const key = locationKey(e.latlng);
+  const list = getVehicleAccidents(key);
+
+  baseRadius = 3500;
+  circle = L.circle(e.latlng,{
+    radius: baseRadius,
+    color:"#ef4444",
+    fillColor:"#ef4444",
+    fillOpacity:.25
+  }).addTo(map);
+
+  updateCircleRadius();
+
+  let html = "<b>Recent Vehicle Accidents</b><br><br>";
+  list.forEach((a,i)=>{
+    html += `${i+1}. ${a.type}<br><small>${a.time}</small><br><br>`;
+  });
+
+  marker.bindPopup(html,{ maxWidth:320 }).openPopup();
+  return;
+}
+
+
+    if(selectedMapType==="Temperature"){
+      const temp=Math.floor(Math.random()*20)+18;
+      let color=temp>30?"#ef4444":temp>24?"#facc15":"#22c55e";
+      baseRadius=2500;
+      circle=L.circle(e.latlng,{radius:baseRadius,color,fillColor:color,fillOpacity:.25}).addTo(map);
+      updateCircleRadius();
+      marker.bindPopup(`<b>Temperature</b><br>${temp}°C`).openPopup();
+      return;
+    }
+
+    if(selectedMapType==="Rain"){
+      const s=["Clear","Rainy","Stormy"][Math.floor(Math.random()*3)];
+      const c=s==="Clear"?"#22c55e":s==="Rainy"?"#38bdf8":"#7c3aed";
+      baseRadius=3000;
+      circle=L.circle(e.latlng,{radius:baseRadius,color:c,fillColor:c,fillOpacity:.25}).addTo(map);
+      updateCircleRadius();
+      marker.bindPopup(`<b>Weather</b><br>${s}`).openPopup();
+    }
+  });
+
+  setTimeout(()=>map.invalidateSize(),400);
+});
+</script>
+
+</body>
+</html>
+
+

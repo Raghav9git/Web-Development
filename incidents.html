@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Incidents | SafeNet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.png">
+<meta name="theme-color" content="#0b2a4a">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+
+body{
+  background:
+    radial-gradient(circle at 20% 20%, #2b1b5a 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, #3b1d6b 0%, transparent 45%),
+    linear-gradient(180deg, #060814, #0b1020 60%, #05060f);
+  color:#fff;
+  min-height:100vh;
+  padding-top:90px;
+}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;top:0;width:100%;
+  padding:14px 24px;
+  background:rgba(11,11,20,.35);
+  backdrop-filter:blur(10px);
+  z-index:2000;
+  display:flex;gap:18px;flex-wrap:wrap;
+}
+.navbar a{
+  color:#fff;text-decoration:none;
+  position:relative;font-size:.95rem;
+}
+.navbar a::after{
+  content:"";position:absolute;left:0;bottom:-4px;
+  width:0;height:2px;background:#ff5cff;transition:.3s;
+}
+.navbar a:hover::after{width:100%}
+
+/* TITLE */
+.page-title{text-align:center;margin-bottom:26px}
+.page-title h1{
+  font-size:2.3rem;
+  background:linear-gradient(90deg,#ff5cff,#8b7cff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.page-title p{opacity:.85;margin-top:6px}
+
+/* FILTERS */
+.filters-wrapper{display:flex;justify-content:center}
+.filters{
+  max-width:1000px;width:100%;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;margin-bottom:30px;
+}
+.filter-card{
+  background:rgba(255,255,255,.06);
+  border-radius:20px;padding:16px;
+  backdrop-filter:blur(12px);
+  animation:slideSide .6s ease;
+}
+.filter-card:hover{
+  background:rgba(255,255,255,.1);
+  transform:translateX(6px);
+}
+.filter-card label{font-size:.85rem;opacity:.8}
+.filter-card select,
+.filter-card input{
+  margin-top:6px;width:100%;
+  padding:10px;
+  border-radius:12px;
+  border:none;
+  background:#141428;
+  color:#fff;
+}
+
+/* calendar icon white */
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter:invert(1);
+}
+
+/* INCIDENTS */
+.incident-list{
+  max-width:1000px;
+  margin:0 auto;
+  display:none;
+  gap:18px;
+}
+.incident-card{
+  background:linear-gradient(135deg,#1a1f3a,#0e1327);
+  border-radius:18px;
+  padding:18px;
+  animation:slideSide .6s ease;
+}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tag{
+  font-size:.72rem;
+  padding:4px 10px;
+  border-radius:999px;
+}
+.low{background:#2b6b3f}
+.medium{background:#b8871a}
+.extreme{background:#7a1f1f}
+.type{background:#1c1c3b}
+
+/* ARCHIVE BUTTON */
+.archive-btn{
+  display:none;
+  margin:40px auto 60px;
+  padding:14px 32px;
+  font-size:1rem;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff5cff,#8b7cff);
+  color:#fff;
+  cursor:pointer;
+}
+.archive-btn:hover{transform:scale(1.05)}
+
+/* CHATBOT */
+.chatbot{
+  position:fixed;right:22px;bottom:22px;
+  width:260px;background:#1a1a3a;
+  border-radius:18px;padding:14px;
+  box-shadow:0 0 25px rgba(255,92,255,.35);
+}
+.chatbot input{
+  width:100%;padding:10px;
+  border-radius:12px;border:none;
+  background:#0e0e20;color:#fff;
+}
+
+@keyframes slideSide{
+  from{opacity:0;transform:translateX(-30px)}
+  to{opacity:1;transform:translateX(0)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <a href="home.html">Home</a>
+  <a href="report.html">Report</a>
+  <a href="incidents.html">Incidents</a>
+  <a href="services.html">Services</a>
+  <a href="map.html">Map</a>
+  <a href="analytics.html">Analytics</a>
+  <a href="your-safety.html">Your Safety</a>
+  <a href="general-info.html">General Info</a>
+  <a href="want-to-help.html">Want To Help?</a>
+  <a href="community-response.html">Community Response</a>
+  <a href="profile.html">Profile</a>
+  <a href="settings.html">Settings</a>
+</div>
+
+<div class="page-title">
+  <h1>Incident Archive</h1>
+  <p>Select all fields to view precise incident records</p>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-wrapper">
+<div class="filters">
+
+  <!-- LOCATION -->
+  <div class="filter-card">
+    <label>Location</label>
+    <select id="state">
+      <option value="">State</option>
+      <option>Maharashtra</option>
+    </select>
+    <select id="district" disabled>
+      <option value="">District</option>
+    </select>
+    <select id="city" disabled>
+      <option value="">City</option>
+    </select>
+    <select id="road" disabled>
+      <option value="">Road</option>
+    </select>
+  </div>
+
+  <!-- DATE -->
+  <div class="filter-card">
+    <label>Date</label>
+    <input type="date" id="date">
+  </div>
+
+  <!-- TIME -->
+  <div class="filter-card">
+    <label>Time</label>
+    <select id="hour"><option value="">Hr</option></select>
+    <select id="minute"><option value="">Min</option></select>
+    <select id="ampm">
+      <option value="">AM/PM</option>
+      <option>AM</option>
+      <option>PM</option>
+    </select>
+  </div>
+
+  <!-- TYPE -->
+  <div class="filter-card">
+    <label>Incident Type</label>
+    <select id="type">
+      <option value="">Select</option>
+      <option>Earthquake</option>
+      <option>Flood</option>
+      <option>Fire</option>
+      <option>Vehicle Accident</option>
+    </select>
+  </div>
+
+  <!-- SEVERITY -->
+  <div class="filter-card">
+    <label>Severity</label>
+    <select id="severity">
+      <option value="">Select</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>Extreme</option>
+    </select>
+  </div>
+
+  <!-- STATUS -->
+  <div class="filter-card">
+    <label>Status</label>
+    <select id="status">
+      <option value="">Select</option>
+      <option>Resolved</option>
+      <option>Unresolved</option>
+    </select>
+  </div>
+
+</div>
+</div>
+
+<!-- INCIDENTS -->
+<div class="incident-list" id="incidentList"></div>
+<button class="archive-btn" id="archiveBtn">View Entire Archive</button>
+
+<!-- CHATBOT -->
+<div class="chatbot">
+  <input placeholder="Ask Me Anything!!!">
+</div>
+
+<script>
+/* ELEMENTS */
+const state = document.getElementById("state");
+const district = document.getElementById("district");
+const city = document.getElementById("city");
+const road = document.getElementById("road");
+const date = document.getElementById("date");
+const hour = document.getElementById("hour");
+const minute = document.getElementById("minute");
+const ampm = document.getElementById("ampm");
+const type = document.getElementById("type");
+const severity = document.getElementById("severity");
+const status = document.getElementById("status");
+
+/* LOCATION DATA */
+const districtsMH=["Thane","Mumbai","Pune"];
+const citiesThane=["Thane","Kalyan","Dombivli"];
+const roadsThane=["Ghodbunder Road","Eastern Express Highway","Pokhran Road"];
+
+state.onchange=()=>{
+  district.disabled=false;
+  district.innerHTML='<option value="">District</option>';
+  districtsMH.forEach(d=>district.innerHTML+=`<option>${d}</option>`);
+};
+
+district.onchange=()=>{
+  city.disabled=false;
+  city.innerHTML='<option value="">City</option>';
+  citiesThane.forEach(c=>city.innerHTML+=`<option>${c}</option>`);
+};
+
+city.onchange=()=>{
+  road.disabled=false;
+  road.innerHTML='<option value="">Road</option>';
+  roadsThane.forEach(r=>road.innerHTML+=`<option>${r}</option>`);
+};
+
+/* TIME */
+for(let i=1;i<=12;i++)hour.innerHTML+=`<option>${i}</option>`;
+for(let i=0;i<=59;i++)minute.innerHTML+=`<option>${i.toString().padStart(2,"0")}</option>`;
+
+/* INCIDENT DATA */
+const incidents=[
+  {
+    title:"Road Accident – Thane",
+    severity:"Medium",
+    type:"Vehicle Accident",
+    desc:"Collision reported during evening hours causing traffic congestion."
+  },
+  {
+    title:"Fire – Industrial Area",
+    severity:"Medium",
+    type:"Fire",
+    desc:"Fire contained with no casualties reported."
+  }
+];
+
+/* RENDER */
+document.querySelectorAll("select,input").forEach(el=>el.onchange=render);
+
+function render(){
+  const required=[
+    state.value,district.value,city.value,road.value,
+    date.value,hour.value,minute.value,ampm.value,
+    type.value,severity.value,status.value
+  ];
+
+  if(required.some(v=>v==="")){
+    document.getElementById("incidentList").style.display="none";
+    document.getElementById("archiveBtn").style.display="none";
+    return;
+  }
+
+  const list=document.getElementById("incidentList");
+  list.style.display="grid";
+  document.getElementById("archiveBtn").style.display="block";
+  list.innerHTML="";
+
+  incidents.forEach(i=>{
+    list.innerHTML+=`
+      <div class="incident-card">
+        <div class="tags">
+          <span class="tag ${i.severity.toLowerCase()}">${i.severity}</span>
+          <span class="tag type">${i.type}</span>
+        </div>
+        <h3>${i.title}</h3>
+        <p><b>Address:</b> ${road.value}, ${city.value}, ${district.value}, Maharashtra</p>
+        <p>${i.desc}</p>
+      </div>
+    `;
+  });
+}
+</script>
+
+</body>
+</html>

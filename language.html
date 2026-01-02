@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Select Language</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{
+  background:linear-gradient(135deg,#f5f7ff,#e8ecff);
+  padding:40px;
+}
+h1{
+  text-align:center;
+  font-size:38px;
+  margin-bottom:45px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:30px;
+  max-width:1200px;
+  margin:auto;
+}
+.lang-btn{
+  height:180px;
+  border-radius:30px;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.35s;
+}
+.lang-btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.35);
+}
+.lang-btn span{
+  position:relative;
+  color:#fff;
+  font-size:32px;
+  font-weight:700;
+  text-shadow:0 4px 10px rgba(0,0,0,.6);
+}
+.lang-btn:hover{
+  transform:scale(1.08);
+  box-shadow:0 22px 45px rgba(0,0,0,.35);
+}
+
+/* images */
+.english{background-image:url("English.jpg")}
+.marathi{background-image:url("Marathi.jpg")}
+.hindi{background-image:url("Hindi.jpg")}
+.bengali{background-image:url("Bengali.jpg")}
+.tamil{background-image:url("Tamil.jpg")}
+.telugu{background-image:url("Telugu.jpg")}
+.malayalam{background-image:url("Malyalam.jpg")}
+.panjabi{background-image:url("Panjabi.jpg")}
+.assami{background-image:url("Assami.jpg")}
+
+</style>
+</head>
+
+<body>
+
+<h1>What language do you want?</h1>
+
+<div class="grid">
+  <div class="lang-btn english" onclick="go('en')"><span>English</span></div>
+  <div class="lang-btn marathi" onclick="go('mr')"><span>मराठी</span></div>
+  <div class="lang-btn hindi" onclick="go('hi')"><span>हिंदी</span></div>
+  <div class="lang-btn bengali" onclick="go('bn')"><span>বাংলা</span></div>
+  <div class="lang-btn tamil" onclick="go('ta')"><span>தமிழ்</span></div>
+  <div class="lang-btn telugu" onclick="go('te')"><span>తెలుగు</span></div>
+  <div class="lang-btn malayalam" onclick="go('ml')"><span>മലയാളം</span></div>
+  <div class="lang-btn panjabi" onclick="go('pa')"><span>ਪੰਜਾਬੀ</span></div>
+  <div class="lang-btn assami" onclick="go('as')"><span>অসমীয়া</span></div>
+</div>
+
+<script>
+function go(lang){
+  localStorage.setItem("lang",lang);
+  window.location.href="report.html";
+}
+</script>
+
+</body>
+</html>

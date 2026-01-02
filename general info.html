@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>General Information | SafeNet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="favicon.png" />
+<meta name="theme-color" content="#0b2a4a" />
+
+<style>
+/* ================= GLOBAL ================= */
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+body{
+  background:radial-gradient(circle at top,#10162a,#050814);
+  color:#fff;
+  overflow-x:hidden;
+  padding-top:80px;
+}
+main{padding:160px 6% 80px}
+p{line-height:1.7;opacity:.9}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.fade-left { animation: fadeLeft .7s ease forwards; }
+.fade-right{ animation: fadeRight .7s ease forwards; }
+
+/* ================= NAVBAR ================= */
+nav{
+  position:fixed;top:0;left:0;width:100%;z-index:1000;
+  display:flex;justify-content:center;gap:22px;
+  padding:14px 20px;
+  background:rgba(8,12,30,.75);
+  border-bottom:1px solid rgba(255,255,255,.08)
+}
+nav a{
+  color:#dbeafe;
+  text-decoration:none;
+  position:relative;
+  transition:color .25s;
+}
+nav a:hover{color:#ffffff}
+nav a::after{
+  content:"";position:absolute;left:0;bottom:-6px;
+  height:2px;width:0;
+  background:linear-gradient(90deg,#38bdf8,#a78bfa);
+  transition:.35s
+}
+nav a:hover::after,nav a.active::after{width:100%}
+
+/* ================= SAFENET ================= */
+.safenet-title{
+  position:fixed;
+  top:88px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:28px;
+  font-weight:700;
+  pointer-events:none;
+  opacity:.95;
+}
+
+/* ================= TOPIC BUTTONS ================= */
+.topic-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;margin-top:30px
+}
+.topic-btn{
+  background:linear-gradient(135deg,#1b2b5a,#121c3a);
+  border:1px solid #2c3f7a;
+  padding:18px;border-radius:16px;
+  cursor:pointer;
+  transition:
+    transform .35s cubic-bezier(.22,.61,.36,1),
+    box-shadow .35s cubic-bezier(.22,.61,.36,1),
+    filter .35s;
+}
+.topic-btn:hover{
+  transform:translateY(-6px) scale(1.03);
+  box-shadow:0 0 28px rgba(108,140,255,.45);
+  filter:brightness(1.08);
+}
+
+/* ================= LEARNING CARD ================= */
+.info-card{
+  display:none;
+  margin-top:40px;
+  background:rgba(15,25,60,.65);
+  border:1px solid rgba(120,150,255,.2);
+  border-radius:22px;
+  padding:34px;
+}
+.info-card h2{color:#a9c1ff}
+
+.nav-btns{
+  display:flex;
+  justify-content:space-between;
+  margin-top:28px
+}
+.counter{opacity:.7;margin-top:12px}
+
+/* ================= QUIZ ================= */
+.quiz-box{
+  margin-top:70px;
+  background:rgba(10,15,40,.75);
+  border-radius:22px;
+  padding:30px;
+  border:1px solid rgba(120,150,255,.2);
+  display:none;
+}
+.quiz-options button{
+  width:100%;
+  margin-bottom:12px;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  background:#1a2b5a;
+  color:white;
+  cursor:pointer;
+  transition:background .3s, transform .2s;
+}
+.quiz-options button:hover{
+  background:#2d4cff;
+  transform:translateY(-2px);
+}
+.coins{margin-top:15px;color:#ffd369;font-weight:700}
+
+/* ================= CHATBOT ================= */
+#chatbot-fab{
+  position:fixed;right:22px;bottom:22px;
+  padding:14px 22px;border-radius:30px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  font-weight:700;cursor:pointer;z-index:9999;
+  transition:.35s;
+}
+#chatbot-fab:hover{
+  transform:translateY(-4px) scale(1.06);
+  box-shadow:
+    0 0 20px rgba(124,108,255,.6),
+    0 0 40px rgba(124,108,255,.4)
+}
+#chatbot{
+  position:fixed;right:22px;bottom:90px;
+  width:320px;height:420px;
+  background:rgba(15,23,42,.95);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.15);
+  display:none;flex-direction:column
+}
+#chatbot-header{
+  padding:12px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;justify-content:space-between
+}
+#chatbot-messages{flex:1;padding:12px;overflow-y:auto}
+.msg{margin-bottom:10px}
+.user{text-align:right;color:#93c5fd}
+.bot{text-align:left;color:#e5e7eb}
+</style>
+</head>
+
+<body>
+
+<h1 class="safenet-title">SafeNet</h1>
+
+<nav>
+<a href="report.html">Report</a>
+<a href="home.html">Home</a>
+<a href="profile.html">Profile</a>
+<a href="settings.html">Settings</a>
+<a href="map.html">Map</a>
+<a href="analytics.html">Analytics</a>
+<a href="your safety.html">Your Safety</a>
+<a class="active" href="general info.html">General Info</a>
+<a href="want to help?.html">Want To Help?</a>
+<a href="community response.html">Community Response</a>
+<a href="services.html">Services</a>
+<a href="incidents.html">Incidents</a>
+</nav>
+
+<main>
+<h1 class="fade-left">General Information & Disaster Awareness</h1>
+<p class="fade-right">Structured professional learning on disasters and disaster management.</p>
+
+<div class="topic-grid fade-left">
+<div class="topic-btn" onclick="startLearning('natural')">Natural Disasters</div>
+<div class="topic-btn" onclick="startLearning('industrial')">Industrial & Man-Made</div>
+<div class="topic-btn" onclick="startLearning('management')">Disaster Management</div>
+<div class="topic-btn" onclick="startLearning('preparedness')">Preparedness & Prevention</div>
+</div>
+
+<div id="learningCard" class="info-card fade-left">
+<h2 id="learnTitle"></h2>
+<p id="learnText"></p>
+<div class="nav-btns">
+<button class="topic-btn" onclick="prevCard()">Previous</button>
+<button class="topic-btn" onclick="nextCard()">Next</button>
+</div>
+<div class="counter">Card <span id="cardIndex"></span> / 10</div>
+</div>
+
+<div id="quizBox" class="quiz-box fade-right">
+<h2>Knowledge Check</h2>
+<div id="question"></div>
+<div class="quiz-options" id="options"></div>
+<div class="coins" id="coins">Coins: 0</div>
+</div>
+</main>
+
+<div id="chatbot">
+<div id="chatbot-header">
+<span>SafeNet Assistant</span>
+<button onclick="toggleChat()">✕</button>
+</div>
+<div id="chatbot-messages"></div>
+<div style="display:flex;padding:10px;gap:6px">
+<input id="chatInput" placeholder="Type your message..."
+ style="flex:1;padding:8px;border-radius:8px;border:none">
+<button onclick="sendMessage()">➤</button>
+</div>
+</div>
+
+<div id="chatbot-fab" onclick="toggleChat()">Ask Me Anything!!!</div>
+
+<script>
+/* ===== DOM CACHE ===== */
+const learnTitle = document.getElementById("learnTitle");
+const learnText  = document.getElementById("learnText");
+const cardIndex  = document.getElementById("cardIndex");
+const quizBox    = document.getElementById("quizBox");
+const question   = document.getElementById("question");
+const options    = document.getElementById("options");
+const coinsEl    = document.getElementById("coins");
+const chatBox    = document.getElementById("chatbot-messages");
+const learningCard = document.getElementById("learningCard");
+
+/* ===== LEARNING DATA ===== */
+const lessons={ /* unchanged content */ 
+natural:["Natural disasters are extreme natural events causing widespread disruption.","Earthquakes occur due to sudden tectonic plate movement.","Floods result from excessive rainfall or river overflow.","Cyclones are intense storm systems with strong winds.","Droughts cause long-term water scarcity.","Landslides involve downward movement of soil or rock.","Volcanic eruptions release lava and ash.","Climate change increases disaster frequency.","Early warning systems save lives.","Risk mapping supports preparedness."],
+industrial:["Industrial disasters arise from technological failures.","Chemical spills contaminate air and water.","Industrial fires result from flammable materials.","Explosions occur due to pressure failure.","Radiological incidents expose radiation.","Oil spills damage ecosystems.","Construction failures collapse structures.","Urban density increases impact.","Safety audits reduce risk.","Regulations prevent disasters."],
+management:["Disaster management minimizes losses.","Mitigation reduces risk beforehand.","Preparedness improves readiness.","Response focuses on rescue.","Search and rescue save lives.","Agency coordination is critical.","Technology enhances response.","Community involvement matters.","Recovery restores livelihoods.","Evaluation improves systems."],
+preparedness:["Preparedness reduces damage.","Public awareness saves lives.","Emergency kits support survival.","Building codes prevent collapse.","Mock drills improve response.","Evacuation planning is vital.","Early warnings enable action.","Local governance leads effort.","Education builds resilience.","Prevention is best strategy."]
+};
+
+let topic="",idx=0,completed=false;
+
+/* ===== LEARNING FLOW (RETRIGGER ANIMATION) ===== */
+function startLearning(t){
+  topic=t; idx=0; completed=false;
+  learningCard.style.display="block";
+  retrigger(learningCard);
+  updateLearning();
+}
+function updateLearning(){
+  learnTitle.innerText = topic.toUpperCase();
+  learnText.innerText  = lessons[topic][idx];
+  cardIndex.innerText  = idx + 1;
+}
+function nextCard(){
+  if(idx < 9){
+    idx++;
+    retrigger(learningCard);
+    updateLearning();
+  } else {
+    completed=true;
+    quizBox.style.display="block";
+    retrigger(quizBox);
+    loadQuiz();
+  }
+}
+function prevCard(){
+  if(idx > 0){
+    idx--;
+    retrigger(learningCard);
+    updateLearning();
+  }
+}
+function retrigger(el){
+  el.classList.remove("fade-left","fade-right");
+  void el.offsetWidth;
+  el.classList.add("fade-left");
+}
+
+/* ===== QUIZ ===== */
+const quiz=[
+{q:"Which disaster involves tectonic plates?",o:["Flood","Earthquake","Cyclone"],a:1},
+{q:"Main aim of disaster management?",o:["Growth","Loss reduction","Prediction"],a:1},
+{q:"Preparedness focuses on?",o:["Before event","After event","Damage"],a:0}
+];
+let qIdx=0,coins=0;
+
+function loadQuiz(){
+  if(!completed) return;
+  if(qIdx>=quiz.length){
+    question.innerText="Quiz completed. Well done.";
+    options.innerHTML="";
+    return;
+  }
+  question.innerText=quiz[qIdx].q;
+  options.innerHTML="";
+  quiz[qIdx].o.forEach((opt,i)=>{
+    const b=document.createElement("button");
+    b.innerText=opt;
+    b.onclick=()=>{
+      if(i===quiz[qIdx].a){
+        coins+=10;
+        coinsEl.innerText="Coins: "+coins;
+      }
+      qIdx++;
+      loadQuiz();
+    };
+    options.appendChild(b);
+  });
+}
+
+/* ===== CHATBOT ===== */
+function toggleChat(){
+  const c=document.getElementById("chatbot");
+  c.style.display=c.style.display==="flex"?"none":"flex";
+}
+function sendMessage(){
+  const input=document.getElementById("chatInput");
+  if(!input.value.trim())return;
+  addMsg(input.value,"user");
+  input.value="";
+  setTimeout(()=>addMsg("I understand. Let me help you with that.","bot"),800);
+}
+function addMsg(text,type){
+  const d=document.createElement("div");
+  d.className="msg "+type;
+  d.innerText=text;
+  chatBox.appendChild(d);
+  chatBox.scrollTop=chatBox.scrollHeight;
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && document.activeElement.id==="chatInput"){
+    sendMessage();
+  }
+});
+</script>
+
+</body>
+</html>

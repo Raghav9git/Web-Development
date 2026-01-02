@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta name="theme-color" content="#0b2a4a">
+
+
+<meta charset="UTF-8">
+<title>Report Incident | SafeConnect</title>
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== SPACE BACKGROUND ===== */
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 20%, #1b2a5a 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, #3b1d6b 0%, transparent 45%),
+    linear-gradient(180deg, #060814, #0b1020 60%, #05060f);
+  color:#e5e7eb;
+}
+
+/* ===== HEADER ===== */
+.app-header{
+  text-align:center;
+  padding:26px 20px 14px;
+}
+.app-header h1{
+  font-size:34px;
+  font-weight:800;
+  background:linear-gradient(90deg,#7dd3fc,#c084fc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.app-header p{
+  color:#a5b4fc;
+  margin-top:6px;
+}
+
+/* ===== NAVBAR ===== */
+nav{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:22px;
+  padding:14px 20px;
+  background:rgba(8,12,30,.75);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+nav a{
+  text-decoration:none;
+  color:#dbeafe;
+  font-weight:500;
+  position:relative;
+  padding-bottom:6px;
+}
+nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:0;
+  height:2px;
+  background:linear-gradient(90deg,#38bdf8,#a78bfa);
+  transition:.35s;
+}
+nav a:hover::after,
+nav a.active::after{
+  width:100%;
+}
+
+/* ===== FIXED NAVBAR ===== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+
+/* Offset page content for fixed navbar */
+body {
+  padding-top: 80px; /* adjust if your navbar is taller */
+}
+
+
+
+/* ===== PAGE ===== */
+.page{
+  display:flex;
+  justify-content:center;
+  padding:40px 20px;
+}
+
+/* ===== CARD (NO OVERFLOW HIDDEN) ===== */
+.card{
+  width:100%;
+  max-width:920px;
+  position:relative;
+  background:rgba(15,23,42,.9);
+  border-radius:22px;
+  padding:38px 40px;
+  border:1px solid rgba(255,255,255,.08);
+  overflow: visible; /* CRITICAL */
+}
+
+/* ===== TEXT ===== */
+.card h2{font-size:28px;color:#e0e7ff}
+.card p{color:#a5b4fc;margin:10px 0 28px}
+
+/* ===== FORM ===== */
+label{
+  display:block;
+  margin-top:22px;
+  font-weight:600;
+  color:#c7d2fe;
+}
+
+input, textarea, select{
+  width:100%;
+  margin-top:10px;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(2,6,23,.9);
+  color:#e5e7eb;
+  font-size:15px;
+  position:relative;
+  z-index:2;
+}
+
+textarea{min-height:120px}
+
+.row{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.row > div{flex:1}
+
+/* ===== MAP ===== */
+#map{
+  height:320px;
+  margin-top:14px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.15);
+  background:#000;
+  position:relative;
+  z-index:1;
+}
+
+.address{
+  margin-top:10px;
+  color:#c7d2fe;
+  font-size:14px;
+}
+
+/* ===== BUTTONS ===== */
+button{
+  margin-top:20px;
+  padding:14px 24px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s;
+  position:relative;
+  z-index:2;
+}
+button:hover{
+  transform:translateY(-2px) scale(1.05);
+  box-shadow:0 0 25px rgba(99,102,241,.8);
+}
+
+.actions{
+  display:flex;
+  gap:16px;
+  margin-top:26px;
+  flex-wrap:wrap;
+}
+
+/* ===== MEMBER ===== */
+.member-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:22px 0;
+}
+.member-text{
+  color:#e0e7ff;
+  font-weight:600;
+}
+
+/* ===== BENEFITS ===== */
+details{
+  margin-top:28px;
+  border-radius:18px;
+  padding:18px;
+  background:rgba(2,6,23,.75);
+  border:1px solid rgba(255,255,255,.08);
+  position:relative;
+  z-index:2;
+}
+details summary{
+  cursor:pointer;
+  font-weight:600;
+  color:#e0e7ff;
+}
+details ul{
+  margin-top:14px;
+  padding-left:22px;
+  color:#c7d2fe;
+}
+details li{margin-bottom:10px}
+
+/* ===== FIX DATE PICKER VISIBILITY ===== */
+input[type="date"] {
+  position: relative;
+  z-index: 5;
+}
+
+/* Chrome / Edge calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  z-index: 6;
+}
+
+/* Ensure popup is clickable */
+input[type="date"] {
+  pointer-events: auto;
+}
+
+/* ===== CHATBOT FLOATING BUTTON (SMOOTH VERSION) ===== */
+#chatbot-fab{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  padding:14px 22px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  z-index:9999;
+
+  /* smoothness magic */
+  transition:
+    transform 0.45s cubic-bezier(.22,.61,.36,1),
+    box-shadow 0.45s cubic-bezier(.22,.61,.36,1),
+    filter 0.45s cubic-bezier(.22,.61,.36,1);
+
+  box-shadow:0 10px 30px rgba(99,102,241,.45);
+  will-change: transform, box-shadow;
+}
+
+/* Speech bubble tail */
+#chatbot-fab::after{
+  content:"";
+  position:absolute;
+  right:18px;
+  bottom:-8px;
+  width:0;
+  height:0;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:10px solid #7c3aed;
+  transition: transform 0.45s cubic-bezier(.22,.61,.36,1);
+}
+
+/* ===== SMOOTH HOVER ===== */
+#chatbot-fab:hover{
+  transform: translateY(-3px) scale(1.045);
+  box-shadow:0 20px 45px rgba(139,92,246,.9);
+  filter:brightness(1.08);
+}
+
+#chatbot-fab:hover::after{
+  transform: translateY(2px);
+}
+
+
+/* ===== CHATBOT PANEL ===== */
+#chatbot{
+  position:fixed;
+  right:22px;
+  bottom:90px;
+  width:320px;
+  height:420px;
+  background:rgba(15,23,42,.95);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.15);
+  display:none;
+  flex-direction:column;
+  z-index:9999;
+  overflow:hidden;
+}
+
+/* Header */
+#chatbot-header{
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:600;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+}
+#chatbot-header button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* Messages */
+#chatbot-messages{
+  flex:1;
+  padding:12px;
+  overflow-y:auto;
+  font-size:14px;
+}
+.msg{
+  margin-bottom:10px;
+  line-height:1.4;
+}
+.user{
+  text-align:right;
+  color:#93c5fd;
+}
+.bot{
+  text-align:left;
+  color:#e5e7eb;
+}
+
+/* CHATBOT FLOAT BUTTON HOVER ANIMATION */
+.chat-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: var(--glow);
+  color: #000;
+  padding: 14px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+
+  /* Smooth animation base */
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+}
+
+/* Hover effect */
+.chat-toggle:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 0 15px rgba(124,108,255,0.6),
+    0 0 35px rgba(124,108,255,0.4),
+    0 0 60px rgba(124,108,255,0.2);
+}
+
+/* Click feedback */
+.chat-toggle:active {
+  transform: scale(0.96);
+}
+
+/* ===== REPORT CARD APPEAR ANIMATION ===== */
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to report card */
+.card {
+  animation: slideUpFade 0.9s cubic-bezier(.22,.61,.36,1) both;
+  animation-delay: 0.15s;
+}
+
+
+
+</style>
+</head>
+        
+
+<body>
+
+<div class="app-header">
+  <h1>SafeNet</h1>
+  <p>Safety & community-driven reporting</p>
+</div>
+
+<nav>
+    <a class="active" href="report.html">Report</a>
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="map.html">Map</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="your safety.html">Your Safety</a>
+    <a href="general info.html">General Info</a>
+    <a href="want to help?.html">Want To Help?</a>
+    <a href="community response.html">Community Response</a>
+    <a href="services.html">Services</a>
+    <a href="incidents.html">Incidents</a>
+</nav>
+
+<div class="page">
+<div class="card">
+
+<h2>What Happened? Report an Incident</h2>
+<p>All reports are confidential and protected.</p>
+
+<label>Describe the incident</label>
+<textarea></textarea>
+
+<label>Type of incident</label>
+<select>
+  <option>Earthquake</option>
+  <option>Flood</option>
+  <option>Fire</option>
+  <option>Cyclone</option>
+  <option>Drought</option>
+  <option>Landslide</option>
+  <option>Vehicle Accident</option>
+  <option>Industrial Accident</option>
+  <option>Other</option>
+
+</select>
+
+<label>Date of incident</label>
+<input type="date">
+
+<label>Time of incident</label>
+<div class="row">
+  <select>
+    <option disabled selected>Hr</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option>6</option>
+    <option>7</option>
+    <option>8</option>
+    <option>9</option>
+    <option>10</option>
+    <option>11</option>
+    <option>12</option>
+  </select>
+  <select>
+    <option disabled selected>Min</option>
+    <option>00 - 05</option>
+    <option>05 - 10</option>
+    <option>10 - 15</option>
+    <option>15 - 20</option>
+    <option>20 - 25</option>
+    <option>25 - 30</option>
+    <option>30 - 35</option>
+    <option>35 - 40</option>
+    <option>40 - 45</option>
+    <option>45 - 50</option>
+    <option>50 - 55</option>
+    <option>55 - 59</option>
+  </select>
+  <select>
+    <option>AM</option><option>PM</option>
+  </select>
+  <label>Severity of accident</label>
+  <select>
+    <option>Low</option>
+    <option>Moderate</option>
+    <option>High</option>
+  </select>
+</div>
+
+<label>Select location of incident</label>
+<div id="map"></div>
+<div class="address" id="addressText">Click on map to select location</div>
+
+<div class="actions">
+  <button>Upload Photo</button>
+  <button>Upload Video</button>
+</div>
+
+<button>Submit Report</button>
+
+<div class="member-row">
+  <div class="member-text">Tell us who you are, become a member</div>
+  <button id = "loginBtn" onclick="window.location.href='home.html'">Log in</button>
+</div>
+
+<details>
+  <summary>Benefits of becoming a member</summary>
+  <ul>
+    <li>Track reported incidents</li>
+    <li>Receive safety alerts</li>
+    <li>Faster authority response</li>
+    <li>Volunteer safely</li>
+    <li>Anonymous reporting</li>
+  </ul>
+</details>
+
+</div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+const lang = localStorage.getItem("lang") || "en";
+
+/* ===== TRANSLATIONS ===== */
+const T = {
+  en:{
+    tagline:"Safety & community-driven reporting",
+    title:"What Happened? Report an Incident",
+    subtitle:"All reports are confidential and protected.",
+    nav:["Report","Home","Profile","Settings","Map","Analytics","Your Safety","General Info","Want To Help?","Community Response","Services","Incidents"],
+    desc:"Describe the incident",
+    type:"Type of incident",
+    types:["Earthquake","Flood","Fire","Cyclone","Drought","Landslide","Vehicle Accident","Industrial Accident","Other"],
+    date:"Date of incident",
+    time:"Time of incident",
+    map:"Select location of incident",
+    uploadPhoto:"Upload Photo",
+    uploadVideo:"Upload Video",
+    submit:"Submit Report",
+    member:"Tell us who you are, become a member",
+    login:"Log in",
+    benefitsTitle:"Benefits of becoming a member",
+    benefits:["Track reported incidents","Receive safety alerts","Faster authority response","Volunteer safely","Anonymous reporting"]
+  },
+  hi:{
+    tagline:"सुरक्षा और समुदाय आधारित रिपोर्टिंग",
+    title:"क्या हुआ? घटना की रिपोर्ट करें",
+    subtitle:"सभी रिपोर्ट गोपनीय और सुरक्षित हैं।",
+    nav:["रिपोर्ट","होम","प्रोफ़ाइल","सेटिंग्स","मानचित्र","विश्लेषण","आपकी सुरक्षा","सामान्य जानकारी","मदद करें?","समुदाय प्रतिक्रिया","सेवाएं","घटनाएं"],
+    desc:"घटना का विवरण",
+    type:"घटना का प्रकार",
+    types:["भूकंप","बाढ़","आग","चक्रवात","सूखा","भूस्खलन","वाहन दुर्घटना","औद्योगिक दुर्घटना","अन्य"],
+    date:"घटना की तारीख",
+    time:"घटना का समय",
+    map:"घटना का स्थान चुनें",
+    uploadPhoto:"फ़ोटो अपलोड करें",
+    uploadVideo:"वीडियो अपलोड करें",
+    submit:"रिपोर्ट सबमिट करें",
+    member:"अपनी पहचान बताएं, सदस्य बनें",
+    login:"लॉग इन",
+    benefitsTitle:"सदस्य बनने के लाभ",
+    benefits:["रिपोर्ट स्थिति देखें","सुरक्षा अलर्ट","तेज़ प्रतिक्रिया","स्वयंसेवक बनें","गुमनाम रिपोर्ट"]
+  },
+  mr:{
+    tagline:"सुरक्षा आणि समुदाय आधारित अहवाल",
+    title:"काय घडलं? घटना नोंदवा",
+    subtitle:"सर्व अहवाल गोपनीय व सुरक्षित आहेत.",
+    nav:["अहवाल","मुख्य","प्रोफाइल","सेटिंग्ज","नकाशा","विश्लेषण","तुमची सुरक्षा","सामान्य माहिती","मदत करायची?","समुदाय प्रतिसाद","सेवा","घटना"],
+    desc:"घटनेचे वर्णन",
+    type:"घटनेचा प्रकार",
+    types:["भूकंप","पूर","आग","चक्रीवादळ","दुष्काळ","भूस्खलन","वाहन अपघात","औद्योगिक अपघात","इतर"],
+    date:"घटनेची तारीख",
+    time:"घटनेची वेळ",
+    map:"घटनेचे स्थान निवडा",
+    uploadPhoto:"फोटो अपलोड करा",
+    uploadVideo:"व्हिडिओ अपलोड करा",
+    submit:"अहवाल सबमिट करा",
+    member:"आपली ओळख द्या, सदस्य बना",
+    login:"लॉग इन",
+    benefitsTitle:"सदस्य होण्याचे फायदे",
+    benefits:["अहवाल स्थिती","सुरक्षा सूचना","जलद प्रतिसाद","स्वयंसेवक व्हा","गोपनीय अहवाल"]
+  },
+  bn:{tagline:"নিরাপত্তা ও সম্প্রদায় ভিত্তিক রিপোর্টিং",title:"কি ঘটেছে? ঘটনা রিপোর্ট করুন",subtitle:"সব রিপোর্ট গোপন রাখা হয়।",nav:["রিপোর্ট","হোম","প্রোফাইল","সেটিংস","মানচিত্র","বিশ্লেষণ","আপনার নিরাপত্তা","সাধারণ তথ্য","সাহায্য করবেন?","সম্প্রদায় প্রতিক্রিয়া","পরিষেবা","ঘটনা"],desc:"ঘটনার বিবরণ",type:"ঘটনার ধরন",types:["ভূমিকম্প","বন্যা","আগুন","ঘূর্ণিঝড়","খরা","ভূমিধস","যান দুর্ঘটনা","শিল্প দুর্ঘটনা","অন্যান্য"],date:"ঘটনার তারিখ",time:"ঘটনার সময়",map:"ঘটনার স্থান নির্বাচন করুন",uploadPhoto:"ছবি আপলোড করুন",uploadVideo:"ভিডিও আপলোড করুন",submit:"রিপোর্ট জমা দিন",member:"আপনার পরিচয় দিন, সদস্য হন",login:"লগইন",benefitsTitle:"সদস্য হওয়ার সুবিধা",benefits:["রিপোর্ট ট্র্যাক করুন","নিরাপত্তা সতর্কতা","দ্রুত প্রতিক্রিয়া","স্বেচ্ছাসেবক হন","গোপন রিপোর্ট"]},
+  ta:{tagline:"பாதுகாப்பு மற்றும் சமூக அறிக்கை",title:"என்ன நடந்தது? சம்பவத்தை பதிவு செய்யவும்",subtitle:"அனைத்து அறிக்கைகளும் ரகசியமானவை.",nav:["அறிக்கை","முகப்பு","சுயவிவரம்","அமைப்புகள்","வரைபடம்","பகுப்பாய்வு","உங்கள் பாதுகாப்பு","பொது தகவல்","உதவ விரும்புகிறீர்களா?","சமூக பதில்","சேவைகள்","சம்பவங்கள்"],desc:"சம்பவ விவரம்",type:"சம்பவ வகை",types:["நிலநடுக்கம்","வெள்ளம்","தீ","சுழற்சி","வறட்சி","மண் சரிவு","வாகன விபத்து","தொழில் விபத்து","மற்றவை"],date:"சம்பவ தேதி",time:"சம்பவ நேரம்",map:"இடத்தை தேர்வு செய்க",uploadPhoto:"புகைப்படம் பதிவேற்று",uploadVideo:"வீடியோ பதிவேற்று",submit:"சமர்ப்பிக்கவும்",member:"உங்களை அறிமுகப்படுத்துங்கள், உறுப்பினராகுங்கள்",login:"உள்நுழை",benefitsTitle:"உறுப்பினர் நன்மைகள்",benefits:["அறிக்கைகள் கண்காணிப்பு","பாதுகாப்பு எச்சரிக்கை","விரைவு பதில்","தன்னார்வம்","அடையாளமற்ற அறிக்கை"]},
+  te:{tagline:"భద్రత మరియు సముదాయ నివేదికలు",title:"ఏమైంది? ఘటనను నివేదించండి",subtitle:"అన్ని నివేదికలు గోప్యంగా ఉంటాయి.",nav:["నివేదిక","హోమ్","ప్రొఫైల్","సెట్టింగ్స్","మ్యాప్","విశ్లేషణ","మీ భద్రత","సాధారణ సమాచారం","సహాయం చేయాలా?","సముదాయ స్పందన","సేవలు","ఘటనలు"],desc:"ఘటన వివరణ",type:"ఘటన రకం",types:["భూకంపం","వరద","అగ్ని","చక్రవాతం","వర్షాభావం","భూస్కలనం","వాహన ప్రమాదం","పరిశ్రమ ప్రమాదం","ఇతర"],date:"ఘటన తేదీ",time:"ఘటన సమయం",map:"స్థలాన్ని ఎంచుకోండి",uploadPhoto:"ఫోటో అప్‌లోడ్",uploadVideo:"వీడియో అప్‌లోడ్",submit:"సమర్పించండి",member:"మీ వివరాలు చెప్పండి, సభ్యుడవండి",login:"లాగిన్",benefitsTitle:"సభ్యత్వ ప్రయోజనాలు",benefits:["నివేదిక ట్రాకింగ్","భద్రత అలర్ట్","వేగవంతమైన స్పందన","స్వచ్ఛంద సేవ","గోప్య నివేదిక"]},
+  ml:{tagline:"സുരക്ഷയും സമൂഹ റിപ്പോർട്ടിംഗും",title:"എന്താണ് സംഭവിച്ചത്? റിപ്പോർട്ട് ചെയ്യുക",subtitle:"എല്ലാ റിപ്പോർട്ടുകളും രഹസ്യമാണ്.",nav:["റിപ്പോർട്ട്","ഹോം","പ്രൊഫൈൽ","സെറ്റിംഗ്സ്","മാപ്പ്","വിശകലനം","നിങ്ങളുടെ സുരക്ഷ","പൊതു വിവരം","സഹായിക്കണോ?","സമൂഹ പ്രതികരണം","സേവനങ്ങൾ","സംഭവങ്ങൾ"],desc:"സംഭവ വിവരണം",type:"സംഭവ തരം",types:["ഭൂകമ്പം","വെള്ളപ്പൊക്കം","തീ","ചുഴലിക്കാറ്റ്","വരൾച്ച","ഭൂസ്ലൈഡ്","വാഹന അപകടം","വ്യവസായ അപകടം","മറ്റ്"],date:"സംഭവ തീയതി",time:"സംഭവ സമയം",map:"സ്ഥലം തിരഞ്ഞെടുക്കുക",uploadPhoto:"ഫോട്ടോ അപ്‌ലോഡ്",uploadVideo:"വീഡിയോ അപ്‌ലോഡ്",submit:"സമർപ്പിക്കുക",member:"നിങ്ങളുടെ വിവരങ്ങൾ നൽകുക, അംഗമാകൂ",login:"ലോഗിൻ",benefitsTitle:"അംഗത്വ ഗുണങ്ങൾ",benefits:["റിപ്പോർട്ട് ട്രാക്കിംഗ്","സുരക്ഷ അലർട്ട്","വേഗത്തിലുള്ള പ്രതികരണം","സ്വയംസേവനം","ഗോപ്യ റിപ്പോർട്ട്"]},
+  pa:{tagline:"ਸੁਰੱਖਿਆ ਅਤੇ ਭਾਈਚਾਰਕ ਰਿਪੋਰਟਿੰਗ",title:"ਕੀ ਹੋਇਆ? ਘਟਨਾ ਰਿਪੋਰਟ ਕਰੋ",subtitle:"ਸਭ ਰਿਪੋਰਟਾਂ ਗੋਪਨੀਅਤ ਹਨ।",nav:["ਰਿਪੋਰਟ","ਹੋਮ","ਪ੍ਰੋਫਾਈਲ","ਸੈਟਿੰਗਾਂ","ਨਕਸ਼ਾ","ਵਿਸ਼ਲੇਸ਼ਣ","ਤੁਹਾਡੀ ਸੁਰੱਖਿਆ","ਆਮ ਜਾਣਕਾਰੀ","ਮਦਦ ਕਰਨੀ ਹੈ?","ਭਾਈਚਾਰਕ ਜਵਾਬ","ਸੇਵਾਵਾਂ","ਘਟਨਾਵਾਂ"],desc:"ਘਟਨਾ ਦਾ ਵੇਰਵਾ",type:"ਘਟਨਾ ਦੀ ਕਿਸਮ",types:["ਭੂਚਾਲ","ਹੜ੍ਹ","ਅੱਗ","ਚੱਕਰਵਾਤ","ਸੁੱਕਾ","ਭੂਸਖਲਨ","ਵਾਹਨ ਹਾਦਸਾ","ਉદ્યોગਿਕ ਹਾਦਸਾ","ਹੋਰ"],date:"ਘਟਨਾ ਦੀ ਤਾਰੀਖ",time:"ਘਟਨਾ ਦਾ ਸਮਾਂ",map:"ਸਥਾਨ ਚੁਣੋ",uploadPhoto:"ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ",uploadVideo:"ਵੀਡੀਓ ਅਪਲੋਡ ਕਰੋ",submit:"ਰਿਪੋਰਟ ਭੇਜੋ",member:"ਆਪਣੀ ਪਛਾਣ ਦਿਓ, ਮੈਂਬਰ ਬਣੋ",login:"ਲਾਗਇਨ",benefitsTitle:"ਮੈਂਬਰ ਬਣਨ ਦੇ ਫਾਇਦੇ",benefits:["ਰਿਪੋਰਟ ਟ੍ਰੈਕਿੰਗ","ਸੁਰੱਖਿਆ ਸੂਚਨਾ","ਤੇਜ਼ ਜਵਾਬ","ਸਵੈਛਿਕ ਸੇਵਾ","ਗੁਪਤ ਰਿਪੋਰਟ"]},
+  as:{tagline:"সুৰক্ষা আৰু সমাজভিত্তিক ৰিপোৰ্টিং",title:"কি ঘটিল? ঘটনা ৰিপোৰ্ট কৰক",subtitle:"সকলো ৰিপোৰ্ট গোপনীয়।",nav:["ৰিপোৰ্ট","হোম","প্ৰ'ফাইল","ছেটিংছ","মানচিত্ৰ","বিশ্লেষণ","আপোনাৰ সুৰক্ষা","সাধাৰণ তথ্য","সহায় কৰিবনে?","সমাজ সঁহাৰি","সেৱাসমূহ","ঘটনা"],desc:"ঘটনাৰ বিৱৰণ",type:"ঘটনাৰ প্ৰকাৰ",types:["ভূমিকম্প","বান","অগ্নিকাণ্ড","ঘূৰ্ণিঝড়","খৰাং","ভূস্খলন","বাহন দুৰ্ঘটনা","উদ্যোগ দুৰ্ঘটনা","অন্যান্য"],date:"ঘটনাৰ তাৰিখ",time:"ঘটনাৰ সময়",map:"স্থান বাছনি কৰক",uploadPhoto:"ফটো আপলোড কৰক",uploadVideo:"ভিডিঅ' আপলোড কৰক",submit:"ৰিপোৰ্ট দাখিল কৰক",member:"আপোনাৰ পৰিচয় দিয়ক, সদস্য হওক",login:"লগইন",benefitsTitle:"সদস্যতাৰ সুবিধা",benefits:["ৰিপোৰ্ট ট্ৰেক কৰক","সুৰক্ষা সতৰ্কতা","দ্ৰুত প্ৰতিক্ৰিয়া","স্বেচ্ছাসেৱা","গোপন ৰিপোৰ্ট"]}
+};
+</script>
+
+<script>
+window.addEventListener("load", () => {
+  const map = L.map("map").setView([19.076,72.8777],10);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19
+  }).addTo(map);
+
+  let marker=null;
+  map.on("click",async e=>{
+    if(marker) map.removeLayer(marker);
+    marker=L.marker(e.latlng).addTo(map);
+
+    const r=await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
+    );
+    const d=await r.json();
+    document.getElementById("addressText").innerText=d.display_name||"Address not found";
+  });
+
+  setTimeout(()=>map.invalidateSize(),400);
+});
+
+</script>
+
+<!-- ===== CHATBOT WIDGET ===== -->
+<div id="chatbot">
+  <div id="chatbot-header">
+    <span>SafeNet Assistant</span>
+    <button onclick="toggleChat()">✕</button>
+  </div>
+
+  <div id="chatbot-messages"></div>
+
+  <div id="chatbot-input">
+    <input id="chatInput" type="text" placeholder="Ask me anything..." />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<div id="chatbot-fab" onclick="toggleChat()">
+  Ask Me Anything!!!
+</div>
+
+
+<script>
+/* ===== CHATBOT CORE ===== */
+
+function toggleChat(){
+  const chat = document.getElementById("chatbot");
+  chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+}
+
+function sendMessage(){
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  addMessage(msg,"user");
+  input.value = "";
+
+  simulateThinking();
+
+  setTimeout(()=>{
+    removeThinking();
+    addMessage(generateAIReply(msg),"bot");
+  }, 900 + Math.random()*1200);
+}
+
+function addMessage(text,type){
+  const box = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerText = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function simulateThinking(){
+  addMessage("Thinking…","bot");
+}
+
+function removeThinking(){
+  const box = document.getElementById("chatbot-messages");
+  const bots = box.querySelectorAll(".bot");
+  if(bots.length) bots[bots.length-1].remove();
+}
+
+/* ===== SIMULATED AI BRAIN ===== */
+function generateAIReply(input){
+  const msg = input.toLowerCase();
+
+  // greetings
+  if(/hi|hello|hey|namaste|hola/.test(msg))
+    return random([
+      "Hello! How can I help you today?",
+      "Hi there 👋 What would you like to know?",
+      "Namaste 🙏 I'm here to help."
+    ]);
+
+  // safety / incident
+  if(msg.includes("incident") || msg.includes("report"))
+    return random([
+      "You can report an incident by filling the form on this page.",
+      "Just describe what happened, choose the location, and submit.",
+      "Incident reporting helps authorities respond faster."
+    ]);
+
+  // map
+  if(msg.includes("map") || msg.includes("location"))
+    return random([
+      "Click anywhere on the map to mark the incident location.",
+      "You can zoom and select the exact location on the map.",
+      "The address will appear once you select a point."
+    ]);
+
+  // anonymity
+  if(msg.includes("anonymous") || msg.includes("privacy"))
+    return random([
+      "Yes, you can report incidents anonymously.",
+      "Your privacy is respected. Personal details are optional.",
+      "Anonymous reporting is supported."
+    ]);
+
+  // language
+  if(msg.includes("language"))
+    return random([
+      "You can choose your preferred language on the first page.",
+      "Language selection helps us show content in your language.",
+      "Multiple Indian languages are supported."
+    ]);
+
+  // time / date
+  if(msg.includes("date") || msg.includes("time"))
+    return random([
+      "Select the date and approximate time when the incident occurred.",
+      "You can choose hour, minute, and AM/PM.",
+      "Providing accurate time helps faster verification."
+    ]);
+
+  // general questions
+  if(msg.includes("why") || msg.includes("how") || msg.includes("what"))
+    return random([
+      "That’s a good question. Could you give a bit more detail?",
+      "Here’s what I can tell you about that.",
+      "Let me explain that in simple terms."
+    ]);
+
+  // fallback (AI-like)
+  return random([
+    "I understand your question. Let me help you with that.",
+    "That’s interesting. Here’s what you should know.",
+    "I’m here to assist you. Could you clarify a bit more?",
+    "Thanks for asking. I’ll try to guide you correctly."
+  ]);
+}
+
+/* ===== UTIL ===== */
+function random(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+/* Enter key support */
+document.getElementById("chatInput")?.addEventListener("keydown",e=>{
+  if(e.key==="Enter") sendMessage();
+});
+</script>
+
+
+
+
+</body>
+</html>

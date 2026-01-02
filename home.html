@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <meta name="theme-color" content="#0b2a4a">
+
+
+<meta charset="UTF-8" />
+<title>SafeNet | Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+/* ================= ROOT VARIABLES ================= */
+:root {
+  --bg1: #070b2a;
+  --bg2: #1a1f4d;
+  --bg3: #3b1a6b;
+  --card: #0c1235;
+  --glow: #7c6cff;
+  --text: #ffffff;
+  --muted: #b8c0ff;
+}
+
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* ================= BODY ================= */
+body {
+  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+header {
+  text-align: center;
+  padding: 30px 10px 15px;
+}
+
+header h1 {
+  font-size: 36px;
+  letter-spacing: 1px;
+}
+
+header p {
+  color: var(--muted);
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+/* ================= NAVBAR ================= */
+nav {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  padding: 14px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* NAV LINK BASE */
+.nav-links a {
+  position: relative;
+  color: #e8ebff;
+  text-decoration: none;
+  font-size: 14px;
+  padding-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+/* UNDERLINE */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--glow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+  box-shadow: 0 0 8px rgba(124, 108, 255, 0.6);
+}
+
+/* HOVER UNDERLINE */
+.nav-links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ACTIVE PAGE */
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+
+/* ===== FIXED NAVBAR ===== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Offset page content for fixed navbar */
+body {
+  padding-top: 80px; /* adjust if your navbar is taller */
+}
+
+/* ================= AUTH BUTTONS ================= */
+.auth button {
+  margin-left: 10px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.login {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--glow);
+}
+
+.signup {
+  background: var(--glow);
+  color: #000;
+}
+
+/* ================= MAIN LAYOUT ================= */
+main {
+  max-width: 1100px;
+  margin: 70px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+}
+
+/* ================= CARDS ================= */
+.card {
+  width: 70%;
+  background: linear-gradient(145deg, #0b1133, #121b55);
+  padding: 35px;
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  position: relative;
+  opacity: 0;
+  transform: translateX(-120px) rotateY(15deg);
+  transition: all 1s ease;
+}
+
+.card.right {
+  align-self: flex-end;
+  transform: translateX(120px) rotateY(-15deg);
+}
+
+/* SHOW ON SCROLL */
+.card.show {
+  opacity: 1;
+  transform: translateX(0) rotateY(0);
+}
+
+/* HOVER EFFECT */
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 0 40px rgba(124, 108, 255, 0.6);
+}
+
+.card h2 {
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.card p,
+.card li {
+  color: #d6dbff;
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.card ul {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+/* ================= JOIN SECTION ================= */
+.join {
+  text-align: center;
+  background: linear-gradient(145deg, #0b1133, #121b55);
+  padding: 45px;
+  border-radius: 25px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.join h2 {
+  margin-bottom: 20px;
+}
+
+.join button {
+  padding: 10px 28px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 15px;
+}
+
+/* ================= CHATBOT ================= */
+.chat-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: var(--glow);
+  color: #000;
+  padding: 14px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(124, 108, 255, 0.8);
+  font-weight: 600;
+  z-index: 1000;
+}
+
+.chat {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 280px;
+  background: #0c1235;
+  border-radius: 18px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.chat header {
+  background: var(--glow);
+  color: #000;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.chat .msgs {
+  padding: 10px;
+  height: 180px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #fff;
+}
+
+.chat input {
+  border: none;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+}
+
+/* CHATBOT FLOAT BUTTON HOVER ANIMATION */
+.chat-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: var(--glow);
+  color: #000;
+  padding: 14px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+
+  /* Smooth animation base */
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+}
+
+/* Hover effect */
+.chat-toggle:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 0 15px rgba(124,108,255,0.6),
+    0 0 35px rgba(124,108,255,0.4),
+    0 0 60px rgba(124,108,255,0.2);
+}
+
+/* Click feedback */
+.chat-toggle:active {
+  transform: scale(0.96);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+  nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+</style>
+</head>
+        
+
+<body>
+
+<header>
+  <h1>SafeNet</h1>
+</header>
+
+<nav>
+  <div class="nav-links">
+    <a href="report.html">Report</a>
+    <a class="active" href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="map.html">Map</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="your safety.html">Your Safety</a>
+    <a href="general info.html">General Info</a>
+    <a href="want to help?.html">Want To Help?</a>
+    <a href="community response.html">Community Response</a>
+    <a href="services.html">Services</a>
+    <a href="incidents.html">Incidents</a>
+  </div>
+  <div class="auth">
+    <button class="login">Login</button>
+    <button class="signup">Sign Up</button>
+  </div>
+</nav>
+
+<main>
+  <!-- WHO ARE WE -->
+<div class="card left reveal">
+  <h2>Who are we?</h2>
+  <p>We are a real time Reporting , Co – ordinating & Monitoring platform for disastrous emergency incidents</p>
+  <p>We are a bridge that fills the gap between Citizens, Communities & Emergency Response Systems.</p>
+</div>
+
+<!-- WHY USE SAFENET -->
+<div class="card right reveal">
+  <h2>Why use SafeNet ?</h2>
+  <ul>
+    <li>Get live awareness of ongoing incidents around you    through map view.</li>
+    <li>Get personal emergency alerts.</li>
+    <li>Report any incident you witness or experience.</li>
+    <li>Get personal guidance on how to contribute in emergency situations</li>
+    <li>Know if the Environment around your required location is safe enough through map view</li>
+    <li>Share your opinion / suggestions regarding incidents.</li>
+    <li>Get full personal guide on disaster management</li>
+  </ul>
+</div>
+
+<!-- WHO WILL THIS BENEFIT -->
+<div class="card left reveal">
+  <h2>Who will this Benefit ?</h2>
+  <ul>
+    <li>Citizens and Travelers for being alert & aware about their surroundings</li>
+    <li>Emergency services who want actual live + overall data on incidents</li>
+    <li>Support services like NGOs, civil hospitals , local responders, social group to take immediate actions</li>
+  </ul>
+</div>
+
+<!-- YOUR SAFETY COMES FIRST -->
+<div class="card right reveal">
+  <h2>Your Safety comes First</h2>
+  <p>We provide ‘ Reporting user ‘ privacy and safety.</p>
+  <p>We also guide user into personal safety + help if they experience or witness an incident</p>
+  <p>We also make user aware of future prevention</p>
+</div>
+
+<!-- USER FRIENDLY FEATURES -->
+<div class="card left reveal">
+  <h2>User Friendly Features</h2>
+  <ul>
+    <li>Can interact in multiple languages</li>
+    <li>Gives visual satellite representation for reporting & also view incidents.</li>
+    <li>Quick reporting without any demands</li>
+    <li>Accessibility across devices</li>
+  </ul>
+</div>
+
+
+  <div class="join">
+    <h2>Join SafeNet Today</h2>
+    <button class="login">Login</button>
+    <button class="signup">Sign Up</button>
+  </div>
+</main>
+
+<div class="chat-toggle" onclick="toggleChat()">Ask Me Anything!!!</div>
+
+<div class="chat" id="chat">
+  <header>SafeNet Assistant</header>
+  <div class="msgs">👋 Hi! How can I help you?</div>
+  <input placeholder="Type here..." />
+</div>
+
+<script>
+/* SCROLL ANIMATION */
+const cards=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting)e.target.classList.add('show');
+  });
+},{threshold:.2});
+cards.forEach(c=>obs.observe(c));
+
+/* CHAT */
+function toggleChat(){
+  const c=document.getElementById("chat");
+  c.style.display=c.style.display==="flex"?"none":"flex";
+}
+</script>
+
+</body>
+</html>

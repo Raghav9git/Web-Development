@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Safety | SafeNet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="favicon.png">
+<meta name="theme-color" content="#0b2a4a">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+body{background:#0f0f1a;color:#fff}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;top:0;width:100%;
+  padding:14px 24px;
+  background:rgba(11,11,20,.35);
+  backdrop-filter:blur(10px);
+  z-index:2000;display:flex;gap:18px;
+  transition:.3s
+}
+.navbar.scrolled{background:#0b0b14}
+.navbar a{color:#fff;text-decoration:none;position:relative}
+.navbar a::after{
+  content:"";position:absolute;left:0;bottom:-4px;
+  width:0;height:2px;background:#b983ff;transition:.3s
+}
+.navbar a:hover::after{width:100%}
+
+/* PAGE */
+.container{padding:120px 20px 60px;max-width:1200px;margin:auto}
+p.sub{color:#aaa;margin-bottom:15px}
+
+/* INPUT */
+.location-input{display:flex;gap:10px;margin-bottom:14px}
+.location-input input{
+  flex:1;padding:10px;border-radius:10px;border:none
+}
+.location-input button{
+  padding:10px 16px;border:none;border-radius:10px;
+  background:#b983ff;cursor:pointer;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.location-input button:hover{
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 0 18px rgba(185,131,255,.6);
+}
+
+/* MAP */
+#map{height:380px;border-radius:16px;margin-bottom:30px}
+
+/* CARDS */
+.section{margin-top:30px}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px
+}
+.card{
+  background:#151528;
+  padding:18px;
+  border-radius:16px;
+  opacity:0;
+  animation:slideIn .7s forwards;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.card:nth-child(even){
+  animation-name:slideInRight;
+}
+.card:hover{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 0 28px rgba(185,131,255,.35);
+}
+.card h3{color:#b983ff;margin-bottom:6px}
+.card p{font-size:.95rem;color:#ddd}
+
+/* SIDEWAYS FADE ANIMATIONS */
+@keyframes slideIn{
+  from{opacity:0;transform:translateX(-30px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes slideInRight{
+  from{opacity:0;transform:translateX(30px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+/* CHATBOT */
+.chatbot-btn{
+  position:fixed;right:20px;bottom:20px;
+  background:linear-gradient(135deg,#b983ff,#ff7adf);
+  padding:14px 18px;border-radius:30px;
+  cursor:pointer;z-index:3000;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.chatbot-btn:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 30px rgba(255,122,223,.6);
+}
+.chatbox{
+  position:fixed;right:20px;bottom:80px;
+  width:280px;background:#151528;
+  border-radius:16px;display:none;
+  flex-direction:column;z-index:3000
+}
+.chatbox header{padding:10px;color:#b983ff}
+.chatbox input{
+  padding:10px;border:none;
+  background:#0f0f1a;color:#fff
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar" id="navbar">
+    <a href="report.html">Report</a>
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="map.html">Map</a>
+    <a href="analytics.html">Analytics</a>
+    <a class="active" href="your safety.html">Your Safety</a>
+    <a href="general info.html">General Info</a>
+    <a href="want to help?.html">Want To Help?</a>
+    <a href="community response.html">Community Response</a>
+    <a href="services.html">Services</a>
+    <a href="incidents.html">Incidents</a>
+</div>
+
+<div class="container">
+<h1>Your Personal Safety Advisor</h1>
+<p class="sub">Get personalized guidance regarding risks around you</p>
+
+<div class="location-input">
+<input id="addressInput" placeholder="Paste hospital / shelter address here">
+<button onclick="searchAddress()">Locate</button>
+</div>
+
+<div id="map"></div>
+
+<p>Click your location on map to know - </p>
+
+<div class="section">
+<h2>Weather Near You</h2>
+<div class="cards" id="weather"></div>
+</div>
+
+<div class="section">
+<h2>Incidents Within Range</h2>
+<div class="cards" id="incidents"></div>
+</div>
+
+<div class="section">
+<h2>What You Should Do Now</h2>
+<div class="cards" id="safety"></div>
+</div>
+</div>
+
+<div class="chatbot-btn" onclick="toggleChat()">Ask Me Anything!!!</div>
+<div class="chatbox" id="chatbox">
+<header>SafeNet Assistant</header>
+<input placeholder="Type your question…" onkeydown="if(event.key==='Enter')this.value=''">
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+const map=L.map('map').setView([19.2183,72.9781],11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+let userMarker,circle,targetMarker,routeLine;
+
+function updateCircle(latlng){
+  if(circle) map.removeLayer(circle);
+  const radius=80000/map.getZoom();
+  circle=L.circle(latlng,{radius,color:'#b983ff'}).addTo(map);
+}
+
+map.on('zoomend',()=>{ if(userMarker) updateCircle(userMarker.getLatLng()) });
+
+map.on('click',e=>{
+  if(userMarker) map.removeLayer(userMarker);
+  userMarker=L.marker(e.latlng).addTo(map)
+    .bindPopup("Nearby risks analyzed.").openPopup();
+  updateCircle(e.latlng);
+  generateDynamicData();
+});
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+function generateDynamicData(){
+
+const weatherType = rand(["Heavy Rain","Thunderstorm"]);
+const incidentType = rand(["Road Flood","Chemical Spill"]);
+
+document.getElementById("weather").innerHTML=`
+<div class="card">
+<h3>${weatherType}</h3>
+<p>${rand(["27°C","29°C"])} — Expected in ${rand(["2–4 hrs","evening"])}</p>
+</div>`;
+
+document.getElementById("incidents").innerHTML=`
+<div class="card">
+<h3>${incidentType}</h3>
+<p>${rand(["Ghodbunder Road","Industrial Area"])} — ${rand(["1.5 km","3 km"])}</p>
+</div>`;
+
+let guidanceHTML = "";
+
+if(weatherType==="Heavy Rain"){
+guidanceHTML+=`
+<div class="card">
+<h3>Heavy Rain Advisory</h3>
+<p>
+1. Stay indoors for the next few hours and avoid travel.<br>
+2. Keep emergency contacts and power backup ready.<br>
+3. Avoid low-lying roads and basement parking.<br>
+📞 Emergency Services: 112 / 108
+</p>
+</div>`;
+}
+
+if(weatherType==="Thunderstorm"){
+guidanceHTML+=`
+<div class="card">
+<h3>Thunderstorm Advisory</h3>
+<p>
+1. Disconnect electrical appliances immediately.<br>
+2. Stay away from windows and balconies.<br>
+3. Do not take shelter under trees or poles.<br>
+📞 Emergency Services: 112
+</p>
+</div>`;
+}
+
+if(incidentType==="Road Flood"){
+guidanceHTML+=`
+<div class="card">
+<h3>Road Flood Incident</h3>
+<p>
+1. Do not attempt to cross flooded roads.<br>
+2. Use elevated alternate routes only if necessary.<br>
+3. Move vehicles to higher ground.<br>
+Nearest Hospital: Jupiter hospital, near Cadbury Junction, close to Viviana Mall, Thane West.<br>
+📞 Ambulance: 108
+</p>
+</div>`;
+}
+
+if(incidentType==="Chemical Spill"){
+guidanceHTML+=`
+<div class="card">
+<h3>Chemical Spill Alert</h3>
+<p>
+1. Close all windows and ventilation immediately.<br>
+2. Avoid industrial zones and follow official instructions.<br>
+3. Seek medical help if experiencing breathing issues.<br>
+Nearest Hospital: Jupiter hospital, near Cadbury Junction, close to Viviana Mall, Thane West.<br>
+📞 Emergency Helpline: 112
+</p>
+</div>`;
+}
+
+document.getElementById("safety").innerHTML = guidanceHTML;
+}
+
+async function searchAddress(){
+  if(!userMarker) return alert("Select your location on map first.");
+
+  let raw = document.getElementById("addressInput").value.trim();
+  if(!raw) return alert("Please paste an address to locate.");
+
+  let query = raw
+    .replace(/near|close to|,/gi," ")
+    .replace(/\s+/g," ")
+    .trim();
+
+  if(!query.toLowerCase().includes("thane")){
+    query += " Thane Maharashtra India";
+  }
+
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url,{
+    headers:{
+      "Accept":"application/json",
+      "User-Agent":"SafeNet-Hackathon-App"
+    }
+  });
+
+  const data = await res.json();
+  if(!data.length){
+    alert("Address not found. Try using landmark name only.");
+    return;
+  }
+
+  const lat=data[0].lat, lon=data[0].lon;
+
+  if(targetMarker) map.removeLayer(targetMarker);
+  if(routeLine) map.removeLayer(routeLine);
+
+  targetMarker=L.marker([lat,lon]).addTo(map)
+    .bindPopup("Destination").openPopup();
+
+  routeLine=L.polyline([
+    userMarker.getLatLng(),
+    [lat,lon]
+  ],{color:'#ff7adf'}).addTo(map);
+
+  map.fitBounds(routeLine.getBounds());
+}
+
+function toggleChat(){
+  const c=document.getElementById("chatbox");
+  c.style.display=c.style.display==="flex"?"none":"flex";
+}
+
+window.addEventListener("scroll",()=>{
+  document.getElementById("navbar")
+    .classList.toggle("scrolled",window.scrollY>20);
+});
+</script>
+
+</body>
+</html>

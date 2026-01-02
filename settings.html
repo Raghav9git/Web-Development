@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeNet | Settings</title>
+
+<style>
+/* ================= GLOBAL THEME ================= */
+:root {
+  --bg: #f7f5fb;
+  --card: #ffffff;
+  --text: #1f1b2e;
+  --muted: #6b6685;
+  --accent: linear-gradient(135deg, #ec4899, #8b5cf6);
+  --accent-solid: #a855f7;
+  --border: #e6e1f0;
+  --hover: #f3e8ff;
+}
+
+body.dark {
+  --bg: #0f0b1f;
+  --card: #17122b;
+  --text: #eae7ff;
+  --muted: #a29bc4;
+  --border: #2a2350;
+  --hover: #221a40;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+}
+
+.nav-inner {
+  width: 95%;
+  margin: auto;
+  padding: 14px 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--accent-solid);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ================= TITLE ================= */
+.title {
+  margin-top: 95px;
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+
+/* ================= SETTINGS ================= */
+.container {
+  max-width: 900px;
+  margin: 30px auto 130px;
+  padding: 0 20px;
+}
+
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 22px;
+  transition: transform 0.25s ease;
+}
+
+.section:hover {
+  transform: translateY(-3px);
+}
+
+.section h3 {
+  margin: 0 0 10px;
+}
+
+.section p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+select, button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+button:hover, select:hover {
+  background: var(--hover);
+}
+
+/* ================= CHATBOT ================= */
+.chatbot {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 999;
+}
+
+.chatbot-btn {
+  background: var(--accent);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(181, 91, 199, 0.45);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.chatbot-btn:hover {
+  transform: scale(1.08);
+}
+
+.chat-window {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 320px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  display: none;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 12px;
+  background: var(--accent);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.chat-body {
+  padding: 12px;
+  height: 180px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.chat-input input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===== ZIG-ZAG FADE ANIMATION ===== */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* base state */
+.section {
+  opacity: 0;
+}
+
+/* zig-zag order */
+.section:nth-child(1) {
+  animation: fadeInLeft 0.7s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.section:nth-child(2) {
+  animation: fadeInRight 0.7s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.section:nth-child(3) {
+  animation: fadeInLeft 0.7s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.section:nth-child(4) {
+  animation: fadeInRight 0.7s ease forwards;
+  animation-delay: 0.4s;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a href="report.html">Report</a>
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a class="active" href="settings.html">Settings</a>
+    <a href="map.html">Map</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="your safety.html">Your Safety</a>
+    <a href="general info.html">General Info</a>
+    <a href="want to help?.html">Want To Help?</a>
+    <a href="community response.html">Community Response</a>
+    <a href="services.html">Services</a>
+    <a href="incidents.html">Incidents</a>
+    </div>
+  </div>
+</div>
+
+<div class="title">SafeNet</div>
+
+<div class="container">
+
+  <!-- LANGUAGE -->
+  <div class="section">
+    <h3>🌐 Language</h3>
+    <p>Change the language of the entire SafeNet website</p>
+    <div class="row">
+      <select>
+        <option>English</option>
+        <option>Hindi</option>
+        <option>Marathi</option>
+        <option>Tamil</option>
+        <option>Telugu</option>
+        <option>Malayalam</option>
+        <option>Punjabi</option>
+        <option>Bengali</option>
+        <option>Assamese</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- APPEARANCE -->
+  <div class="section">
+    <h3>🎨 Appearance</h3>
+    <p>Switch between light and dark mode</p>
+    <div class="row">
+      <button onclick="toggleTheme()">Toggle Dark / Light Mode</button>
+    </div>
+  </div>
+
+  <!-- PRIVACY & SECURITY (OLD VERSION) -->
+  <div class="section">
+    <h3>🔐 Privacy & Security</h3>
+    <p>Manage your account safety and data protection</p>
+    <div class="row">
+      <button>Change Password</button>
+      <button>Log Out</button>
+    </div>
+  </div>
+
+  <!-- SYSTEM -->
+  <div class="section">
+    <h3>⚙️ System</h3>
+    <p>Reset or manage system preferences</p>
+    <div class="row">
+      <button onclick="resetSettings()">Reset All Settings</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- CHATBOT -->
+<div class="chatbot">
+  <button class="chatbot-btn" onclick="toggleChat()">Ask Me Anything!!!</button>
+  <div class="chat-window" id="chat">
+    <div class="chat-header">SafeNet Assistant</div>
+    <div class="chat-body">Your safety and privacy come first.</div>
+    <div class="chat-input">
+      <input placeholder="Type your question..." />
+    </div>
+  </div>
+</div>
+
+<script>
+/* GLOBAL THEME */
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem(
+    "theme",
+    document.body.classList.contains("dark") ? "dark" : "light"
+  );
+}
+
+/* CHAT */
+function toggleChat() {
+  const chat = document.getElementById("chat");
+  chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+}
+</script>
+
+</body>
+</html>
