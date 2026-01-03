@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Community Response | SafeNet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="favicon.png">
+<meta name="theme-color" content="#0b2a4a">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+body{
+  background:
+    radial-gradient(circle at 20% 20%, #2b1b5a 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, #3b1d6b 0%, transparent 45%),
+    linear-gradient(180deg, #060814, #0b1020 60%, #05060f);
+  color:#fff;
+  min-height:100vh;
+  padding-top:90px;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+  position:fixed;top:0;width:100%;
+  padding:14px 24px;
+  background:rgba(11,11,20,.35);
+  backdrop-filter:blur(10px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:1000;
+}
+.navbar a{
+  color:#fff;
+  text-decoration:none;
+  margin:0 8px;
+  font-size:.9rem;
+}
+
+/* ===== HEADER ===== */
+header{
+  padding:30px 6% 10px;
+}
+header h1{font-size:2.2rem}
+header p{
+  opacity:.85;
+  margin-top:8px;
+  max-width:720px;
+  line-height:1.6;
+}
+
+/* ===== FILTER PANEL ===== */
+.filter-panel{
+  margin:30px 6%;
+  background:rgba(255,255,255,.06);
+  border-radius:20px;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;
+}
+.filter-panel select,
+.filter-panel input{
+  padding:10px;
+  background:#0b0b14;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:10px;
+}
+.filter-panel button{
+  grid-column:1/-1;
+  padding:12px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ff4ecd,#7a5cff);
+  color:#fff;
+  cursor:pointer;
+}
+
+/* ===== INCIDENT CARDS ===== */
+.incidents{
+  padding:40px 6%;
+  display:flex;
+  flex-direction:column;
+  gap:32px;
+}
+.incident-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  padding:20px;
+  display:flex;
+  gap:20px;
+  cursor:pointer;
+  opacity:0;
+  transform:translateX(-80px);
+  animation:slideIn .8s forwards;
+}
+.incident-card:nth-child(even){
+  flex-direction:row-reverse;
+  transform:translateX(80px);
+}
+@keyframes slideIn{
+  to{opacity:1;transform:translateX(0)}
+}
+.incident-card img{
+  width:160px;
+  height:110px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.incident-card:hover{
+  background:rgba(255,255,255,.12);
+}
+
+/* ===== FEEDBACK ===== */
+.feedback{
+  display:none;
+  margin-top:16px;
+  background:rgba(0,0,0,.45);
+  padding:14px;
+  border-radius:12px;
+}
+.feedback textarea{
+  width:100%;
+  height:90px;
+  background:#0b0b14;
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;
+  border-radius:8px;
+  padding:10px;
+}
+.feedback select{
+  width:100%;
+  margin-top:10px;
+  padding:8px;
+  background:#0b0b14;
+  color:#fff;
+  border-radius:8px;
+}
+.feedback button{
+  margin-top:12px;
+  padding:10px 18px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ff4ecd,#7a5cff);
+  color:#fff;
+  cursor:pointer;
+}
+
+/* ===== CHATBOT ===== */
+#chatbot-btn{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:linear-gradient(135deg,#ff4ecd,#7a5cff);
+  padding:14px 18px;
+  border-radius:30px;
+  cursor:pointer;
+}
+#chatbot-box{
+  position:fixed;
+  right:22px;
+  bottom:80px;
+  width:260px;
+  background:#0b0b14;
+  border-radius:16px;
+  padding:14px;
+  display:none;
+}
+
+h2{margin-left:80px;}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <strong>SafeNet</strong>
+  <div>
+    <a href="report.html">Report</a>
+    <a href="home.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="map.html">Map</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="your safety.html">Your Safety</a>
+    <a href="general info.html">General Info</a>
+    <a href="want to help?.html">Want To Help?</a>
+    <a href="incidents.html">Community Response</a>
+    <a href="services.html">Services</a>
+    <a href="incidents.html">Incidents</a>
+  </div>
+</div>
+
+<header>
+  <h1>Community Response</h1>
+  <p>
+    This page allows citizens to share suggestions, experiences, or feedback
+    about incidents and the help provided by emergency services, volunteers, or NGOs.
+    Your response is sent directly to authorities to improve future action.
+  </p>
+</header>
+
+<div class="filter-panel">
+  <select><option>State</option></select>
+  <select><option>District</option></select>
+  <select><option>City</option></select>
+  <select><option>Road</option></select>
+  <input type="date">
+  <select><option>Incident Type</option></select>
+  <select><option>Severity</option></select>
+  <select><option>Status</option></select>
+  <button onclick="loadIncidents()">Apply Filters</button>
+</div>
+
+<h2>Share your thoughts about incidents near you</h2>
+
+<section class="incidents" id="incidentList"></section>
+
+<div id="chatbot-btn" onclick="toggleChatbot()">Ask Me Anything!!!</div>
+<div id="chatbot-box">Hi 👋 I’m SafeNet Assistant.</div>
+
+<script>
+const incidents = [
+  {title:"Mumbai Building Collapse",desc:"Heavy rain caused structural failure."},
+  {title:"Pune Highway Accident",desc:"Multi-vehicle collision in fog."},
+  {title:"Flooded Suburban Area",desc:"Waterlogging after continuous rain."}
+];
+
+let openCard = null;
+
+function loadIncidents(){
+  const list=document.getElementById("incidentList");
+  list.innerHTML="";
+  incidents.forEach(i=>{
+    const card=document.createElement("div");
+    card.className="incident-card";
+    card.innerHTML=`
+      <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5">
+      <div>
+        <h3>${i.title}</h3>
+        <p>${i.desc}</p>
+        <div class="feedback" onclick="event.stopPropagation()">
+          <textarea placeholder="Share your suggestion or experience..."></textarea>
+          <select>
+            <option>I witnessed this incident</option>
+            <option>I was affected</option>
+            <option>I helped / volunteered</option>
+            <option>Verified information</option>
+            <option>General suggestion</option>
+          </select>
+          <button onclick="submitFeedback(event)">Submit Feedback</button>
+        </div>
+      </div>`;
+    card.addEventListener("click",()=>toggleFeedback(card));
+    list.appendChild(card);
+  });
+}
+
+function toggleFeedback(card){
+  const fb=card.querySelector(".feedback");
+  if(openCard && openCard!==fb) openCard.style.display="none";
+  fb.style.display = fb.style.display==="block" ? "none" : "block";
+  openCard = fb.style.display==="block" ? fb : null;
+}
+
+function submitFeedback(e){
+  e.stopPropagation();
+  alert("Thank you. Your feedback has been shared with emergency services.");
+}
+
+function toggleChatbot(){
+  const box=document.getElementById("chatbot-box");
+  box.style.display=box.style.display==="block"?"none":"block";
+}
+
+loadIncidents();
+</script>
+
+</body>
+</html>
