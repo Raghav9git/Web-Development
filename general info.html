@@ -55,17 +55,7 @@ nav a::after{
 }
 nav a:hover::after,nav a.active::after{width:100%}
 
-/* ================= SAFENET ================= */
-.safenet-title{
-  position:fixed;
-  top:88px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:28px;
-  font-weight:700;
-  pointer-events:none;
-  opacity:.95;
-}
+
 
 /* ================= TOPIC BUTTONS ================= */
 .topic-grid{
@@ -169,7 +159,7 @@ nav a:hover::after,nav a.active::after{width:100%}
 
 <body>
 
-<h1 class="safenet-title">SafeNet</h1>
+
 
 <nav>
 <a href="report.html">Report</a>
@@ -196,6 +186,15 @@ nav a:hover::after,nav a.active::after{width:100%}
 <div class="topic-btn" onclick="startLearning('management')">Disaster Management</div>
 <div class="topic-btn" onclick="startLearning('preparedness')">Preparedness & Prevention</div>
 </div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 <div id="learningCard" class="info-card fade-left">
 <h2 id="learnTitle"></h2>
@@ -349,3 +348,4 @@ document.addEventListener("keydown",e=>{
 
 </body>
 </html>
+
