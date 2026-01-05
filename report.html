@@ -412,18 +412,16 @@ input[type="date"] {
 </div>
 
 <nav>
-    <a class="active" href="report.html">Report</a>
-    <a href="home.html">Home</a>
-    <a href="profile.html">Profile</a>
-    <a href="settings.html">Settings</a>
-    <a href="map.html">Map</a>
-    <a href="analytics.html">Analytics</a>
-    <a href="your safety.html">Your Safety</a>
-    <a href="general info.html">General Info</a>
-    <a href="want to help.html">Want To Help?</a>
-    <a href="community response.html">Community Response</a>
-    <a href="services.html">Services</a>
-    <a href="incidents.html">Incidents</a>
+  <a id="nav-report" class="active" href="report.html">Report</a>
+  <a id="nav-home" href="home.html">Home</a>
+  <a id="nav-profile" href="profile.html">Profile</a>
+  <a id="nav-settings" href="settings.html">Settings</a>
+  <a id="nav-analytics" href="analytics.html">Analytics</a>
+  <a id="nav-safety" href="your safety.html">Your Safety</a>
+  <a id="nav-help" href="want to help.html">Want To Help?</a>
+  <a id="nav-community" href="community response.html">Community Response</a>
+  <a id="nav-services" href="services.html">Services</a>
+  <a id="nav-incidents" href="view-incidents.html">View Incidents</a>
 </nav>
 
 <div class="page">
@@ -433,10 +431,10 @@ input[type="date"] {
 <p>All reports are confidential and protected.</p>
 
 <label>Describe the incident</label>
-<textarea></textarea>
+<textarea id="desc"></textarea>
 
 <label>Type of incident</label>
-<select>
+<select id="incidentType">
   <option>Earthquake</option>
   <option>Flood</option>
   <option>Fire</option>
@@ -450,11 +448,11 @@ input[type="date"] {
 </select>
 
 <label>Date of incident</label>
-<input type="date">
+<input type="date" id="incidentDate">
 
 <label>Time of incident</label>
 <div class="row">
-  <select>
+  <select id="hour">
     <option disabled selected>Hr</option>
     <option>1</option>
     <option>2</option>
@@ -469,7 +467,7 @@ input[type="date"] {
     <option>11</option>
     <option>12</option>
   </select>
-  <select>
+  <select id="minute">
     <option disabled selected>Min</option>
     <option>00 - 05</option>
     <option>05 - 10</option>
@@ -484,11 +482,11 @@ input[type="date"] {
     <option>50 - 55</option>
     <option>55 - 59</option>
   </select>
-  <select>
+  <select id="ampm">
     <option>AM</option><option>PM</option>
   </select>
   <label>Severity of accident</label>
-  <select>
+  <select id="severity">
     <option>Low</option>
     <option>Moderate</option>
     <option>High</option>
@@ -504,7 +502,8 @@ input[type="date"] {
   <button>Upload Video</button>
 </div>
 
-<button>Submit Report</button>
+<button id="submitReportBtn">Submit Report</button>
+
 
 <div class="member-row">
   <div class="member-text">Tell us who you are, become a member</div>
@@ -600,6 +599,13 @@ const T = {
 </script>
 
 <script>
+let selectedLat = null;
+let selectedLng = null;
+let selectedAddress = "";
+</script>
+
+
+<script>
 window.addEventListener("load", () => {
   const map = L.map("map").setView([19.076,72.8777],10);
 
@@ -608,16 +614,26 @@ window.addEventListener("load", () => {
   }).addTo(map);
 
   let marker=null;
-  map.on("click",async e=>{
-    if(marker) map.removeLayer(marker);
-    marker=L.marker(e.latlng).addTo(map);
+  map.on("click", async e => {
+  if(marker) map.removeLayer(marker);
+  marker = L.marker(e.latlng).addTo(map);
 
-    const r=await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
-    );
-    const d=await r.json();
-    document.getElementById("addressText").innerText=d.display_name||"Address not found";
-  });
+  
+  selectedLat = e.latlng.lat;
+  selectedLng = e.latlng.lng;
+
+  const r = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
+  );
+  const d = await r.json();
+
+  
+  selectedAddress = d.display_name || "";
+
+  document.getElementById("addressText").innerText =
+    selectedAddress || "Address not found";
+});
+
 
   setTimeout(()=>map.invalidateSize(),400);
 });
@@ -767,9 +783,5 @@ document.getElementById("chatInput")?.addEventListener("keydown",e=>{
 });
 </script>
 
-
-
-
 </body>
 </html>
-
