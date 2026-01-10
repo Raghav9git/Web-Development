@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login | SafeNet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 20%, #2b1b5a 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, #3b1d6b 0%, transparent 45%),
+    linear-gradient(180deg, #060814, #0b1020 60%, #05060f);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+}
+
+.login-box{
+  width:440px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  padding:30px;
+  backdrop-filter:blur(14px);
+  animation:fadeUp .6s ease;
+}
+
+h2{text-align:center;margin-bottom:8px}
+.subtitle{text-align:center;font-size:.9rem;opacity:.8;margin-bottom:18px}
+
+label{font-size:.9rem;opacity:.85}
+input,select{
+  width:100%;
+  padding:10px;
+  margin:8px 0 16px;
+  background:#0f1328;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:10px;
+  color:#fff;
+}
+
+.extra{display:none}
+
+.toggle{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
+}
+.toggle button{
+  flex:1;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.2);
+  background:#0f1328;
+  color:#fff;
+  cursor:pointer;
+}
+.toggle button.active{
+  background:linear-gradient(135deg,#b86bff,#ff6bd6);
+  border:none;
+}
+
+button.main{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#b86bff,#ff6bd6);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s;
+}
+button.main:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 18px #ff6bd6;
+}
+
+.msg{
+  text-align:center;
+  margin-top:14px;
+  font-size:.9rem;
+  opacity:.9;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+  <h2>SafeNet Access</h2>
+  <div class="subtitle">Login or create an account</div>
+
+  <div class="toggle">
+    <button type="button" id="loginBtn" onclick="setMode('login')">Login</button>
+    <button type="button" id="signupBtn" onclick="setMode('signup')">Sign Up</button>
+
+  </div>
+
+  <label>Username</label>
+  <input id="username" placeholder="Enter username">
+
+  <label>Password</label>
+  <input id="password" type="password" placeholder="Enter password">
+
+  <label>Who are you?</label>
+  <select id="role" onchange="roleChanged()">
+    <option value="">Select role</option>
+    <option value="citizen">Normal Citizen</option>
+    <option value="volunteer">Social Volunteer</option>
+    <option value="ngo">NGO</option>
+    <option value="responder">Local Responder</option>
+    <option value="hospital">Hospital Worker</option>
+    <option value="emergency">Emergency Service</option>
+  </select>
+
+  <div id="extraFields" class="extra">
+    <label>Organization Name / ID</label>
+    <input id="org" placeholder="Organization name or ID">
+
+    <label>Designation</label>
+    <select id="subRole">
+      <option>Field Worker</option>
+      <option>Coordinator</option>
+      <option>Medical Staff</option>
+      <option>Authority</option>
+    </select>
+  </div>
+
+  <button type="button" class="main" onclick="submit()">Continue</button>
+
+
+  <div id="msg" class="msg"></div>
+</div>
+
+<script>
+let mode="login";
+
+function setMode(m){
+  mode=m;
+  document.getElementById("loginBtn").classList.toggle("active",m==="login");
+  document.getElementById("signupBtn").classList.toggle("active",m==="signup");
+  document.getElementById("msg").innerText="";
+}
+
+function roleChanged(){
+  const role=document.getElementById("role").value;
+  document.getElementById("extraFields").style.display =
+    role && role!=="citizen" ? "block":"none";
+}
+
+function show(t){
+  document.getElementById("msg").innerText=t;
+}
+</script>
+
+
+
+<!--===== FIREBASE AUTH + FIRESTORE ===== -->
+
+<script type="module">
+  import { auth, db } from "./firebase/firebase.js";
+  import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import {
+    doc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  // expose submit() globally for button click
+  window.submit = async function () {
+    const email = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const role = document.getElementById("role").value;
+
+    if (!email || !password || !role) {
+      show("Please fill all required fields");
+      return;
+    }
+
+    try {
+      if (mode === "login") {
+        // LOGIN
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "home.html";
+      }
+
+      if (mode === "signup") {
+        // SIGNUP
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
+        // store user profile in Firestore
+        const organization =
+  document.getElementById("org")?.value.trim() || "";
+
+const designation =
+  document.getElementById("subRole")?.value || "";
+
+await setDoc(doc(db, "users", user.uid), {
+  email: user.email,
+  role: role,
+
+  // authority metadata
+  organization: role === "citizen" ? null : organization,
+  designation: role === "citizen" ? null : designation,
+
+  // verification logic
+  verified: role === "citizen", // citizens auto-verified
+
+  createdAt: serverTimestamp()
+});
+
+
+        window.location.href = "home.html";
+      }
+
+    } catch (err) {
+  console.log("FIREBASE ERROR:", err.code, err.message);
+  show(humanReadableAuthError(err.code));
+}
+
+  };
+
+  function humanReadableAuthError(code) {
+    switch (code) {
+      case "auth/email-already-in-use":
+        return "This email is already registered. Please login.";
+      case "auth/weak-password":
+        return "Password should be at least 6 characters.";
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/user-not-found":
+        return "Account not found. Please sign up first.";
+      case "auth/wrong-password":
+        return "Incorrect password. Please try again.";
+      default:
+        return "Authentication failed. Please try again.";
+    }
+  }
+</script>
+
+
+
+</body>
+</html>
