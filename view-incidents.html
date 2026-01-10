@@ -126,16 +126,16 @@ nav a:hover::after,nav a.active::after{width:100%}
 <body>
 
 <nav>
-  <a class="active" href="report.html">Report</a>
-    <a href="home.html">Home</a>
-    <a href="profile.html">Profile</a>
-    <a href="settings.html">Settings</a>
-    <a href="analytics.html">Analytics</a>
-    <a href="your safety.html">Your Safety</a>
-    <a href="want to help.html">Want To Help?</a>
-    <a href="community response.html">Community Response</a>
-    <a href="services.html">Services</a>
-    <a href="view-incidents.html">View Incidents</a>
+  <a href="report.html">Report</a>
+  <a href="home.html">Home</a>
+  <a href="profile.html">Profile</a>
+  <a href="settings.html">Settings</a>
+  <a href="analytics.html">Analytics</a>
+  <a href="your safety.html">Your Safety</a>
+  <a href="want to help.html">Want To Help?</a>
+  <a href="community response.html">Community Response</a>
+  <a href="services.html">Services</a>
+  <a class="active" href="view-incidents.html">View Incidents</a>
 </nav>
 
 <!-- MAP CONTROLS -->
@@ -158,20 +158,10 @@ nav a:hover::after,nav a.active::after{width:100%}
     <div id="map"></div>
     <div class="info" id="infoText">Select a map type, then click on the map</div>
 
-    <!-- RESOURCE TRACKING -->
     <div class="resources">
-      <div class="resource-card">
-        <h4>🚑 Ambulance</h4>
-        Status: <b>On the way</b>
-      </div>
-      <div class="resource-card">
-        <h4>🚒 Fire Brigade</h4>
-        Status: <b>Reached</b>
-      </div>
-      <div class="resource-card">
-        <h4>🏠 Shelter</h4>
-        Status: <b>Available</b>
-      </div>
+      <div class="resource-card"><h4>🚑 Ambulance</h4>Status: <b>On the way</b></div>
+      <div class="resource-card"><h4>🚒 Fire Brigade</h4>Status: <b>Reached</b></div>
+      <div class="resource-card"><h4>🏠 Shelter</h4>Status: <b>Available</b></div>
     </div>
   </div>
 </div>
@@ -181,85 +171,83 @@ nav a:hover::after,nav a.active::after{width:100%}
   <h2>Incident Archive</h2>
 
   <div class="filters">
-    <select id="state"><option value="">State</option><option>Maharashtra</option></select>
-    <select id="district"><option value="">District</option><option>Thane</option></select>
-    <select id="city"><option value="">City</option><option>Thane</option></select>
-    <select id="road"><option value="">Road</option><option>Eastern Express Highway</option></select>
-    <input type="date" id="date">
-    <select id="type"><option value="">Type</option><option>Fire</option><option>Vehicle Accident</option></select>
-    <select id="severity"><option value="">Severity</option><option>Low</option><option>Medium</option><option>Extreme</option></select>
-    <select id="status"><option value="">Status</option><option>Resolved</option><option>Unresolved</option></select>
+    <select><option>State</option></select>
+    <select><option>District</option></select>
+    <select><option>City</option></select>
+    <select><option>Road</option></select>
+    <input type="date">
+    <select><option>Type</option></select>
+    <select><option>Severity</option></select>
+    <select><option>Status</option></select>
   </div>
 
   <div class="incident-list" id="incidentList"></div>
-  <button class="archive-btn" id="archiveBtn">View Entire Archive</button>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-let selectedMapType=null,map,marker=null,circle=null,baseRadius=3000;
+let map = L.map("map").setView([19.076,72.8777],10);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+let selectedMapType = null;
+let simulatedLayer = [];
 
 function selectMap(type){
-  selectedMapType=type;
-  infoText.innerText=type+" selected. Click on map.";
+  selectedMapType = type;
+  document.getElementById("infoText").innerText =
+    "Map mode: " + type + " | Click on map to simulate incident";
 }
 
-function clearVisuals(){
-  if(marker) map.removeLayer(marker);
-  if(circle) map.removeLayer(circle);
+function clearSimulated(){
+  simulatedLayer.forEach(l => map.removeLayer(l));
+  simulatedLayer = [];
 }
 
-window.onload=()=>{
-  map=L.map("map").setView([19.076,72.8777],10);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+map.on("click", e => {
+  if(!selectedMapType) return;
 
-  map.on("click",e=>{
-    if(!selectedMapType){alert("Select map type first");return;}
-    clearVisuals();
-    marker=L.marker(e.latlng).addTo(map);
+  clearSimulated();
 
-    if(selectedMapType==="VehicleAccident"){
-      circle=L.circle(e.latlng,{radius:3500,color:"#ef4444",fillOpacity:.25}).addTo(map);
-      marker.bindPopup("<b>Recent Vehicle Accidents</b><br>Car Collision<br>Truck Accident").openPopup();
-    }
-    if(selectedMapType==="IndustrialAccident"){
-      circle=L.circle(e.latlng,{radius:4000,color:"#f97316",fillOpacity:.25}).addTo(map);
-      marker.bindPopup("<b>Industrial Accidents</b><br>Chemical Spill<br>Machinery Accident").openPopup();
-    }
-    if(selectedMapType==="Temperature"){
-      marker.bindPopup("<b>Temperature</b><br>28°C").openPopup();
-    }
-    if(selectedMapType==="Rain"){
-      marker.bindPopup("<b>Weather</b><br>Rainy").openPopup();
-    }
-  });
-};
+  let radius = 0;
+  let color = "#38bdf8";
+  let popupText = "";
 
-/* ARCHIVE FILTER LOGIC */
-const inputs=document.querySelectorAll(".filters select,.filters input");
-inputs.forEach(i=>i.onchange=renderArchive);
-
-function renderArchive(){
-  const values=[...inputs].map(i=>i.value);
-  if(values.some(v=>v==="")){
-    incidentList.style.display="none";
-    archiveBtn.style.display="none";
-    return;
+  switch(selectedMapType){
+    case "Temperature":
+      radius = 1500;
+      color = "#f97316";
+      popupText = "🌡 High Temperature Zone";
+      break;
+    case "Rain":
+      radius = 2000;
+      color = "#38bdf8";
+      popupText = "🌧 Heavy Rain / Storm Area";
+      break;
+    case "VehicleAccident":
+      radius = 800;
+      color = "#ef4444";
+      popupText = "🚗 Vehicle Accident Reported";
+      break;
+    case "IndustrialAccident":
+      radius = 1200;
+      color = "#a855f7";
+      popupText = "🏭 Industrial Accident Zone";
+      break;
   }
-  incidentList.style.display="grid";
-  archiveBtn.style.display="block";
-  incidentList.innerHTML=`
-    <div class="incident-card">
-      <div class="tags">
-        <span class="tag medium">Medium</span>
-        <span class="tag type">Vehicle Accident</span>
-      </div>
-      <h4>Road Accident – Thane</h4>
-      <p>Traffic collision reported.</p>
-    </div>
-  `;
-}
+
+  const marker = L.marker(e.latlng).addTo(map);
+  const circle = L.circle(e.latlng,{
+    radius,
+    color,
+    fillColor:color,
+    fillOpacity:0.3
+  }).addTo(map);
+
+  marker.bindPopup(popupText).openPopup();
+
+  simulatedLayer.push(marker,circle);
+});
 </script>
 
 </body>
