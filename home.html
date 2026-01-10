@@ -199,6 +199,49 @@ main {
   margin-top: 10px;
 }
 
+
+/* ================= FAQ ================= */
+.faq-item {
+  margin-top: 15px;
+  margin-right: 50px;
+}
+
+.faq-question {
+  background: rgba(124,108,255,0.15);
+  padding: 14px 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.faq-question:hover {
+  background: rgba(124,108,255,0.25);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  margin-top: 8px;
+  padding-left: 5px;
+  color: #d6dbff;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 300px;
+}
+
+/* ================= CENTER FAQ CARD ================= */
+.faq-section {
+  margin-left: auto;
+  margin-right: auto;
+  align-self: center;
+}
+
+
 /* ================= JOIN SECTION ================= */
 .join {
   text-align: center;
@@ -234,6 +277,7 @@ main {
   box-shadow: 0 0 30px rgba(124, 108, 255, 0.8);
   font-weight: 600;
   z-index: 1000;
+  margin: right 0px;
 }
 
 .chat {
@@ -316,6 +360,14 @@ main {
   }
 }
 
+nav {
+  visibility:visible;
+}
+
+nav[data-auth="pending"] {
+  display: none !important;
+}
+
 </style>
 </head>
         
@@ -326,30 +378,33 @@ main {
   <h1>SafeNet</h1>
 </header>
 
-<nav>
+<nav data-auth="pending">
+
   <div class="nav-links">
-    <a href="report.html">Report</a>
-    <a class="active" href="home.html">Home</a>
-    <a href="profile.html">Profile</a>
-    <a href="settings.html">Settings</a>
-    <a href="analytics.html">Analytics</a>
-    <a href="your safety.html">Your Safety</a>
-    <a href="want to help.html">Want To Help?</a>
-    <a href="community response.html">Community Response</a>
-    <a href="services.html">Services</a>
-    <a href="view-incidents.html">View Incidents</a>
+    <a id="nav-report" href="report.html">Report</a>
+<a id="nav-home" class="active" href="home.html">Home</a>
+<a id="nav-profile" href="profile.html">Profile</a>
+<a id="nav-settings" href="settings.html">Settings</a>
+<a id="nav-analytics" href="analytics.html">Analytics</a>
+<a id="nav-safety" href="your safety.html">Your Safety</a>
+<a id="nav-help" href="want to help.html">Want To Help?</a>
+<a id="nav-community" href="community response.html">Community Response</a>
+<a id="nav-services" href="services.html">Services</a>
+<a id="nav-incidents" href="view-incidents.html">View Incidents</a>
+
   </div>
   <div class="auth">
-    <button class="login" onclick="location.href='login.html'">Login</button>
-    <button class="signup" onclick="location.href='login.html'">Sign Up</button>
-  </div>
+  <button id="auth-login" class="login" onclick="location.href='login.html'">Login</button>
+  <button id="auth-signup" class="signup" onclick="location.href='login.html'">Sign Up</button>
+</div>
+
 </nav>
 
 <main>
   <!-- WHO ARE WE -->
 <div class="card left reveal">
   <h2>Who are we?</h2>
-  <p>We are a real time Reporting , Co – ordinating & Monitoring platform for disastrous emergency incidents</p>
+  <p>We are a real time Reporting , Co – ordinating & Monitoring platform for emergency crisis incidents</p>
   <p>We are a bridge that fills the gap between Citizens, Communities & Emergency Response Systems.</p>
 </div>
 
@@ -404,6 +459,92 @@ main {
   </div>
 </main>
 
+
+<!-- ================= FAQ SECTION ================= -->
+<section class="card faq-section reveal">
+  <h2>Frequently Asked Questions (FAQs)</h2>
+<div class="faq-item">
+  <div class="faq-question">Does SafeNet replace emergency numbers?</div>
+  <div class="faq-answer">
+    No. SafeNet does not replace emergency numbers such as 112 or local emergency helplines.
+    It works alongside them by providing a real-time, map-based overview of incidents
+    to improve awareness, coordination, and response planning.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">When should I use SafeNet?</div>
+  <div class="faq-answer">
+    SafeNet should be used to report incidents, stay aware of nearby risks,
+    and coordinate community support.
+    In life-threatening situations, users should always contact official
+    emergency services first.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">Why should authorities and organizations use SafeNet?</div>
+  <div class="faq-answer">
+    Traditional emergency calls handle incidents individually.
+    SafeNet allows authorities, NGOs, and support services to view
+    multiple incidents together on a map, understand patterns,
+    and coordinate resources more effectively.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">Who is SafeNet designed for?</div>
+  <div class="faq-answer">
+    SafeNet is designed for citizens, volunteers, NGOs, hospitals,
+    and emergency response organizations.
+    It also helps normal citizens stay informed about their surroundings
+    and make safer decisions.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">Is my identity safe when I report an incident?</div>
+  <div class="faq-answer">
+    Yes. SafeNet prioritizes user privacy.
+    Personal identity is not publicly displayed.
+    Only essential incident-related information is shown to ensure
+    safety, awareness, and coordination.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">Can I help even if I am not an authority?</div>
+  <div class="faq-answer">
+    Yes. Community members and volunteers can offer help,
+    share information, and respond to requests without
+    needing to be an official authority.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">Does SafeNet work in multiple languages?</div>
+  <div class="faq-answer">
+    Yes. SafeNet is designed to support multiple local languages
+    so people from different regions can use it easily and effectively.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">What does each section of the SafeNet website do?</div>
+  <div class="faq-answer">
+    Report allows users to submit incidents.
+    View Incidents shows reported incidents on a map and in a list.
+    Analytics provides basic insights and trends.
+    Your Safety offers safety guidance.
+    Want To Help and Community Response enable collaboration.
+    Services is used by organizations to monitor and coordinate actions.
+  </div>
+</div>
+
+
+
+
+
 <div class="chat-toggle" onclick="toggleChat()">Ask Me Anything!!!</div>
 
 <div class="chat" id="chat">
@@ -429,7 +570,94 @@ function toggleChat(){
 }
 </script>
 
-<script type="module" src="firebase/firebase.js"></script>
+<!--===== DYNAMIC NAVBAR ===== -->
+
+<script type="module">
+import { watchAuth } from "./firebase/authState.js";
+import { db } from "./firebase/firebase.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const ALL_LINKS = [
+  "nav-home",
+  "nav-report",
+  "nav-profile",
+  "nav-settings",
+  "nav-analytics",
+  "nav-safety",
+  "nav-help",
+  "nav-community",
+  "nav-services",
+  "nav-incidents"
+];
+
+function hideAll() {
+  ALL_LINKS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  document.getElementById("auth-login")?.style.setProperty("display", "none");
+  document.getElementById("auth-signup")?.style.setProperty("display", "none");
+}
+
+function show(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "inline-block";
+  });
+}
+
+watchAuth(async (user) => {
+  hideAll();
+
+  const nav = document.querySelector("nav");
+
+  // 🚪 GUEST / ANONYMOUS
+  if (!user.loggedIn || user.isAnonymous) {
+    show(["nav-home", "nav-report"]);
+    document.getElementById("auth-login")?.style.setProperty("display", "inline-block");
+    document.getElementById("auth-signup")?.style.setProperty("display", "inline-block");
+    nav.removeAttribute("data-auth");
+    return;
+  }
+
+  // 🔐 LOGGED IN → FETCH ROLE
+  const snap = await getDoc(doc(db, "users", user.uid));
+  const role = snap.exists() ? snap.data().role : "citizen";
+
+  // 👤 NORMAL CITIZEN (NO SERVICES)
+  if (role === "citizen") {
+    show([
+      "nav-home",
+      "nav-report",
+      "nav-profile",
+      "nav-settings",
+      "nav-analytics",
+      "nav-safety",
+      "nav-help",
+      "nav-community",
+      "nav-incidents"
+    ]);
+    nav.removeAttribute("data-auth");
+    return;
+  }
+
+  // 🏥 NGO / HOSPITAL / RESPONDER → ALL ACCESS
+  show(ALL_LINKS);
+  nav.removeAttribute("data-auth");
+});
+</script>
+
+<script>
+/* FAQ TOGGLE */
+document.querySelectorAll(".faq-question").forEach(q => {
+  q.addEventListener("click", () => {
+    q.parentElement.classList.toggle("active");
+  });
+});
+</script>
+
+
 
 </body>
 </html>
