@@ -139,6 +139,50 @@ button{
   color:#e879f9;
 }
 .note{font-size:.85rem;opacity:.7;margin-top:10px}
+
+/* INCIDENT ARCHIVE */
+.archive{
+  max-width:1100px;
+  margin:40px auto;
+  padding:0 20px;
+}
+.archive h2{
+  text-align:center;
+  margin-bottom:20px;
+  background:linear-gradient(90deg,#ff5cff,#8b7cff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.filters{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;margin-bottom:24px;
+}
+.filters select,.filters input{
+  padding:10px;border-radius:12px;
+  border:none;background:#141428;color:#fff;
+}
+.incident-list{display:none;gap:16px}
+.incident-card{
+  background:linear-gradient(135deg,#1a1f3a,#0e1327);
+  border-radius:16px;padding:14px;
+}
+.tags{display:flex;gap:8px;margin-bottom:6px}
+.tag{font-size:.7rem;padding:4px 10px;border-radius:999px}
+.low{background:#2b6b3f}
+.medium{background:#b8871a}
+.extreme{background:#7a1f1f}
+.type{background:#1c1c3b}
+
+.archive-btn{
+  margin:30px auto 0;
+  display:none;
+  padding:14px 32px;
+  border:none;border-radius:999px;
+  background:linear-gradient(90deg,#ff5cff,#8b7cff);
+  color:#fff;cursor:pointer;
+}
+
 </style>
 </head>
 
@@ -214,6 +258,25 @@ button{
     </div>
   </div>
 </section>
+
+<!--Response from community-->
+<div class="archive">
+  <h2>Select the Incident to know the Citizens opinion</h2>
+
+  <div class="filters">
+    <select id="state"><option value="">State</option><option>Maharashtra</option></select>
+    <select id="district"><option value="">District</option><option>Thane</option></select>
+    <select id="city"><option value="">City</option><option>Thane</option></select>
+    <select id="road"><option value="">Road</option><option>Eastern Express Highway</option></select>
+    <input type="date" id="date">
+    <select id="type"><option value="">Type</option><option>Fire</option><option>Vehicle Accident</option></select>
+    <select id="severity"><option value="">Severity</option><option>Low</option><option>Medium</option><option>Extreme</option></select>
+    <select id="status"><option value="">Status</option><option>Resolved</option><option>Unresolved</option></select>
+  </div>
+
+  <div class="incident-list" id="incidentList"></div>
+  <button class="archive-btn" id="archiveBtn">View Entire Archive</button>
+</div>
 
 <!-- COMMUNITY / ORGANIZATION RESPONSES -->
 <section class="card">
