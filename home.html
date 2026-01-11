@@ -57,19 +57,29 @@ header p {
 
 /* ================= NAVBAR ================= */
 nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(10px);
   padding: 14px 25px;
-  flex-wrap: wrap;
-  align-items: center;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+
+  z-index: 1000;
 }
+
 
 .nav-links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 /* NAV LINK BASE */
@@ -123,25 +133,40 @@ body {
 }
 
 /* ================= AUTH BUTTONS ================= */
-.auth button {
-  margin-left: 10px;
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
+.auth {
+  display: flex;
+  gap: 10px;
 }
 
-.login {
+.auth button {
+  padding: 6px 16px;
+  border-radius: 18px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth .login {
   background: transparent;
-  color: #fff;
+  color: #e8ebff;
   border: 1px solid var(--glow);
 }
 
-.signup {
-  background: var(--glow);
-  color: #000;
+.auth .login:hover {
+  background: rgba(124,108,255,0.15);
 }
+
+.auth .signup {
+  background: linear-gradient(135deg, #7c6cff, #a78bfa);
+  color: #05060f;
+  border: none;
+  box-shadow: 0 0 15px rgba(124,108,255,.6);
+}
+
+.auth .signup:hover {
+  transform: translateY(-1px) scale(1.05);
+}
+
 
 /* ================= MAIN LAYOUT ================= */
 main {
@@ -662,6 +687,7 @@ document.querySelectorAll(".faq-question").forEach(q => {
 
 </body>
 </html>
+
 
 
 
