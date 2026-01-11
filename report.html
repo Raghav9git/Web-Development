@@ -127,6 +127,33 @@ label{
   color:#c7d2fe;
 }
 
+input,
+textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px 16px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+
+  background: rgba(2,6,23,.9);
+  color: #e5e7eb;
+
+  font-size: 15px;
+}
+
+  input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+  input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #7c6cff;
+  box-shadow: 0 0 0 2px rgba(124,108,255,.25);
+}
 
 
 textarea{min-height:120px}
@@ -1064,6 +1091,7 @@ watchAuth(async (user) => {
 
 </body>
 </html>
+
 
 
 
