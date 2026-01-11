@@ -127,18 +127,7 @@ label{
   color:#c7d2fe;
 }
 
-input, textarea, select{
-  width:100%;
-  margin-top:10px;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(2,6,23,.9);
-  color:#e5e7eb;
-  font-size:15px;
-  position:relative;
-  z-index:2;
-}
+
 
 textarea{min-height:120px}
 
@@ -243,6 +232,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"] {
   pointer-events: auto;
 }
+
+  select {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(2,6,23,.9);
+  color: #e5e7eb;
+}
+
 
 /* ===== CHATBOT FLOATING BUTTON (SMOOTH VERSION) ===== */
 #chatbot-fab{
@@ -1064,6 +1064,7 @@ watchAuth(async (user) => {
 
 </body>
 </html>
+
 
 
 
