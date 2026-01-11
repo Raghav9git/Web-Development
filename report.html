@@ -498,10 +498,10 @@ nav[data-auth="pending"] {
 <p>All reports are confidential and protected.</p>
 
 <label>Describe the incident</label>
-<textarea></textarea>
+<textarea id="desc"></textarea>
 
 <label>Type of incident</label>
-<select>
+<select id="incidentType">
   <option>Earthquake</option>
   <option>Flood</option>
   <option>Fire</option>
@@ -519,8 +519,8 @@ nav[data-auth="pending"] {
 <input type="date" id="incidentDate">
 
 <label>Time of incident</label>
-<div class="row>
-  <select id="hour>
+<div class="row">
+  <select id="hour">
     <option disabled selected>Hr</option>
     <option>1</option>
     <option>2</option>
@@ -1064,6 +1064,7 @@ watchAuth(async (user) => {
 
 </body>
 </html>
+
 
 
 
